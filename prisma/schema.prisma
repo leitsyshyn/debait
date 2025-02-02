@@ -1,130 +1,151 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
-model User {
-  id             Int              @id @default(autoincrement())
-  username       String           @unique
-  email          String           @unique
-  password       String
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-
-  takes          Take[]           // User's posted takes
-  arguments      Argument[]       // User's arguments on takes
-  votes          ArgumentVote[]   // Votes cast by the user on arguments
-
-  followedUsers  UserFollow[]     @relation("UserFollowsFollower")
-  followingUsers UserFollow[]     @relation("UserFollowsFollowing")
-  followedTopics TopicFollow[]    // Topics followed by the user
-
-  @@map("users")
+ 
+generator client {
+  provider = "prisma-client-js"
 }
+ 
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  // Optional for WebAuthn support
+  // Authenticator Authenticator[]
+ 
+  // createdAt DateTime @default(now())
+  // updatedAt DateTime @updatedAt
+
+  takes          Take[]
+  arguments      Argument[]
+  votes          Vote[]
+  followedUsers  Follow[]  @relation("FollowingUsers")
+  followingUsers Follow[]  @relation("FollowerUsers")
+  followedTopics Topic[]   @relation("UserFollowedTopics")
+  createdAt      DateTime  @default(now())
+}
+ 
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@id([provider, providerAccountId])
+}
+ 
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+ 
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+ 
+  @@id([identifier, token])
+}
+ 
+// Optional for WebAuthn support
+// model Authenticator {
+//   credentialID         String  @unique
+//   userId               String
+//   providerAccountId    String
+//   credentialPublicKey  String
+//   counter              Int
+//   credentialDeviceType String
+//   credentialBackedUp   Boolean
+//   transports           String?
+ 
+//   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+//   @@id([userId, credentialID])
+// }
 
 model Take {
-  id             Int              @id @default(autoincrement())
-  title          String
-  content        String
-  status         Status           @default(ONGOING) 
-  authorId       Int
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-
-  author         User             @relation(fields: [authorId], references: [id])
-  arguments      Argument[]       // Arguments posted on this take
-  topics         TakeTopic[]      // Topics associated with this take
-
-  @@map("takes")
+  id        Int        @id @default(autoincrement())
+  author    User       @relation(fields: [authorId], references: [id])
+  authorId  String
+  status    TakeStatus
+  content   String
+  topics    Topic[]    @relation("TakeTopics")
+  arguments Argument[]
+  createdAt DateTime   @default(now())
+  closedAt  DateTime?
 }
 
 model Argument {
-  id             Int              @id @default(autoincrement())
-  content        String
-  userId         Int
-  takeId         Int
-  createdAt      DateTime         @default(now())
-
-  author         User             @relation(fields: [userId], references: [id])
-  take           Take             @relation(fields: [takeId], references: [id])
-  votes          ArgumentVote[]   // Votes on this argument
-
-  @@map("arguments")
+  id        Int        @id @default(autoincrement())
+  author    User       @relation(fields: [authorId], references: [id])
+  authorId  String
+  take      Take       @relation(fields: [takeId], references: [id])
+  takeId    Int
+  type      ArgumentType
+  content   String
+  votes     Vote[]
+  createdAt DateTime   @default(now())
 }
 
-model ArgumentVote {
-  userId         Int
-  argumentId     Int
-  type           Int              // 1 for upvote, -1 for downvote
-  createdAt      DateTime         @default(now())
+model Vote {
+  id         Int        @id @default(autoincrement())
+  user       User       @relation(fields: [userId], references: [id])
+  userId     String
+  argument   Argument   @relation(fields: [argumentId], references: [id])
+  argumentId Int
+  value      Int        // 1 for upvote, -1 for downvote
+  createdAt  DateTime   @default(now())
 
-  user           User             @relation(fields: [userId], references: [id])
-  argument       Argument         @relation(fields: [argumentId], references: [id])
-
-  @@id([userId, argumentId])      // Composite primary key
-
-  @@map("argument_votes")
+  @@unique([userId, argumentId]) // Prevents duplicate votes per argument
 }
 
 model Topic {
-  id             Int              @id @default(autoincrement())
-  name           String           @unique
-
-  followers      TopicFollow[]    // Users following this topic
-  takes          TakeTopic[]      // Takes associated with this topic
-
-  @@map("topics")
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  takes     Take[]   @relation("TakeTopics")
+  followers User[]   @relation("UserFollowedTopics")
+  createdAt DateTime @default(now())
 }
 
-model TakeTopic {
-  takeId         Int
-  topicId        Int
+model Follow {
+  id         Int      @id @default(autoincrement())
+  follower   User     @relation("FollowingUsers", fields: [followerId], references: [id])
+  followerId String
+  followed   User     @relation("FollowerUsers", fields: [followedId], references: [id])
+  followedId String
+  createdAt  DateTime @default(now())
 
-  take           Take             @relation(fields: [takeId], references: [id])
-  topic          Topic            @relation(fields: [topicId], references: [id])
-
-  @@id([takeId, topicId])         // Composite primary key
-
-  @@map("take_topics")
+  @@unique([followerId, followedId]) // Prevents duplicate follows
 }
 
-model TopicFollow {
-  userId         Int
-  topicId        Int
-  createdAt      DateTime         @default(now())
-
-  user           User             @relation(fields: [userId], references: [id])
-  topic          Topic            @relation(fields: [topicId], references: [id])
-
-  @@id([userId, topicId])         // Composite primary key
-
-  @@map("topic_follows")
-}
-
-model UserFollow {
-  followerId     Int
-  followingId    Int
-  createdAt      DateTime         @default(now())
-
-  follower       User             @relation("UserFollowsFollower", fields: [followerId], references: [id])
-  following      User             @relation("UserFollowsFollowing", fields: [followingId], references: [id])
-
-  @@id([followerId, followingId]) // Composite primary key
-
-  @@map("user_follows")
-}
-
-enum Status {
-  ONGOING
+enum TakeStatus {
+  OPEN
   CLOSED
+}
+
+enum ArgumentType {
+  SUPPORT
+  CRITIQUE
 }
