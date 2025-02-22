@@ -7,14 +7,14 @@ import {
   registerSchema,
   resetPasswordSchema,
   verifyEmailSchema,
-} from "@/lib/zod";
+} from "@/lib/schemas";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import {
   generateEmailVerificationToken,
   generatePasswordResetToken,
   generateTwoFactorToken,
-} from "@/actions/tokens";
+} from "@/actions/auth/tokens";
 import {
   sendVerificationEmail,
   sendResetPasswordEmail,

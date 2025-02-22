@@ -1,7 +1,7 @@
 import GitHub from "next-auth/providers/github";
 import Credentials from "next-auth/providers/credentials";
 import type { NextAuthConfig } from "next-auth";
-import { loginSchema } from "@/lib/zod";
+import { loginSchema } from "@/lib/schemas";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 

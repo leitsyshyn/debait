@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema } from "@/lib/zod";
+import { forgotPasswordSchema } from "@/lib/schemas";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,22 +23,20 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { AlertCircle, Loader2 } from "lucide-react";
-import { register } from "@/actions/users";
 import { startTransition, useActionState, useRef } from "react";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { forgotPassword } from "@/actions/auth/users";
 
-export function RegisterForm() {
-  const form = useForm<z.infer<typeof registerSchema>>({
-    resolver: zodResolver(registerSchema),
+export function ForgotPasswordForm() {
+  const form = useForm<z.infer<typeof forgotPasswordSchema>>({
+    resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
-      name: "",
       email: "",
-      password: "",
     },
     mode: "onTouched",
   });
 
-  const [state, formAction, isPending] = useActionState(register, null);
+  const [state, formAction, isPending] = useActionState(forgotPassword, null);
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -46,8 +44,10 @@ export function RegisterForm() {
     <div className="flex flex-col gap-6">
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Welcome</CardTitle>
-          <CardDescription>Create an account</CardDescription>
+          <CardTitle className="text-xl">Forgot Password?</CardTitle>
+          <CardDescription>
+            Enter your email and we&apos;ll send you a reset link
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -66,19 +66,6 @@ export function RegisterForm() {
             >
               <FormField
                 control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input type="text" placeholder="User Name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem>
@@ -89,19 +76,6 @@ export function RegisterForm() {
                         placeholder="user@example.com"
                         {...field}
                       />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input id="password" type="password" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -127,7 +101,7 @@ export function RegisterForm() {
                     <Loader2 className="animate-spin" /> Please wait
                   </>
                 ) : (
-                  "Sign up"
+                  "Send reset link"
                 )}
               </Button>
             </form>
@@ -135,17 +109,12 @@ export function RegisterForm() {
         </CardContent>
         <CardFooter>
           <div className="text-center text-sm w-full">
-            Already have an account?{" "}
             <a href="/auth/login" className="underline underline-offset-4">
-              Sign in
+              Return to Sign in
             </a>
           </div>
         </CardFooter>
       </Card>
-      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
-      </div>
     </div>
   );
 }

@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { verifyEmailSchema } from "@/lib/zod";
+import { verifyEmailSchema } from "@/lib/schemas";
 import {
   Card,
   CardContent,
@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
 import { AlertCircle, CheckCircle, Loader2 } from "lucide-react";
-import { verifyEmail } from "@/actions/users";
+import { verifyEmail } from "@/actions/auth/users";
 import { useRef, startTransition, useActionState, useEffect } from "react";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { useSearchParams } from "next/navigation";

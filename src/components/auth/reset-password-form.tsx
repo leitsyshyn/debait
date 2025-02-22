@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { resetPasswordSchema } from "@/lib/zod";
+import { resetPasswordSchema } from "@/lib/schemas";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -25,7 +25,7 @@ import {
 import { AlertCircle, Loader2 } from "lucide-react";
 import { startTransition, useActionState, useRef } from "react";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { resetPassword } from "@/actions/users";
+import { resetPassword } from "@/actions/auth/users";
 import { useSearchParams } from "next/navigation";
 
 export function ResetPasswordForm() {
