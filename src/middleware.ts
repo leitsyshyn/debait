@@ -1,0 +1,53 @@
+import NextAuth from "next-auth";
+import authConfig from "@/lib/auth.config";
+
+const { auth } = NextAuth(authConfig);
+
+import {
+  publicRoutes,
+  authRoutes,
+  apiAuthPrefix,
+  DEFAULT_LOGIN_REDIRECT,
+} from "@/routes";
+import { NextRequest, NextResponse } from "next/server";
+import type { Session } from "next-auth";
+
+interface NextAuthRequest extends NextRequest {
+  auth: Session | null;
+}
+
+export default auth(async function middleware(req: NextAuthRequest) {
+  const isAuthorized = !!req.auth;
+  console.log("Auth", req.auth);
+  console.log("URL", req.nextUrl.pathname);
+  const isApiAuthRoute = req.nextUrl.pathname.startsWith(apiAuthPrefix);
+  const isPublicRoute = publicRoutes.includes(req.nextUrl.pathname);
+  const isAuthRoute = authRoutes.includes(req.nextUrl.pathname);
+  console.log("Checks", isPublicRoute, isAuthRoute, isApiAuthRoute);
+
+  if (isApiAuthRoute) {
+    return NextResponse.next();
+  }
+
+  if (isAuthRoute) {
+    if (isAuthorized) {
+      return NextResponse.redirect(
+        new URL(DEFAULT_LOGIN_REDIRECT, req.nextUrl)
+      );
+    }
+    return NextResponse.next();
+  }
+
+  if (!isAuthorized && !isPublicRoute) {
+    console.log("Redirecting to login");
+    return NextResponse.redirect(new URL("/auth/login", req.nextUrl));
+  }
+
+  return NextResponse.next();
+});
+
+export const config = {
+  matcher: [
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+  ],
+};

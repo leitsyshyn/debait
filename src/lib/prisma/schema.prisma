@@ -6,14 +6,23 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
 }
+
+enum UserRole {
+  USER
+  ADMIN
+}
  
 model User {
   id            String          @id @default(cuid())
   name          String?
+  image         String?
   email         String          @unique
   emailVerified DateTime?
-  hashedPassword      String? 
-  image         String?
+  hashedPassword String? 
+  role          UserRole        @default(USER)
+  isTwoFactorEnabled Boolean    @default(false)
+  twoFactorConfirmation TwoFactorConfirmation?
+  
   accounts      Account[]
   sessions      Session[]
   // Optional for WebAuthn support
@@ -67,6 +76,41 @@ model VerificationToken {
   expires    DateTime
  
   @@id([identifier, token])
+}
+
+model EmailVerificationToken {
+  id         String @id @default(cuid())
+  token      String @unique
+  email      String
+  expires    DateTime
+ 
+  @@unique([email, token])
+}
+
+model PasswordResetToken {
+  id         String @id @default(cuid())
+  token      String @unique
+  email      String
+  expires    DateTime
+ 
+  @@unique([email, token])
+}
+
+model TwoFactorToken {
+  id         String @id @default(cuid())
+  token      String @unique
+  email      String
+  expires    DateTime
+ 
+  @@unique([email, token])
+}
+
+model TwoFactorConfirmation {
+  if        String @id @default(cuid())
+  userId    String
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId])
 }
  
 //Optional for WebAuthn support
