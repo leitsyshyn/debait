@@ -48,3 +48,10 @@ export const resetPasswordSchema = object({
     "Token is required"
   ),
 });
+
+export const createPostSchema = object({
+  content: string({ required_error: "Content is required" }).min(
+    1,
+    "Content is required"
+  ),
+});

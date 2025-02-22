@@ -18,12 +18,9 @@ interface NextAuthRequest extends NextRequest {
 
 export default auth(async function middleware(req: NextAuthRequest) {
   const isAuthorized = !!req.auth;
-  console.log("Auth", req.auth);
-  console.log("URL", req.nextUrl.pathname);
   const isApiAuthRoute = req.nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoutes.includes(req.nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(req.nextUrl.pathname);
-  console.log("Checks", isPublicRoute, isAuthRoute, isApiAuthRoute);
 
   if (isApiAuthRoute) {
     return NextResponse.next();
@@ -39,7 +36,6 @@ export default auth(async function middleware(req: NextAuthRequest) {
   }
 
   if (!isAuthorized && !isPublicRoute) {
-    console.log("Redirecting to login");
     return NextResponse.redirect(new URL("/auth/login", req.nextUrl));
   }
 

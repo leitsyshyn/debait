@@ -1,6 +1,6 @@
 "use server";
 
-import { signIn } from "@/lib/auth";
+import { signIn, signOut } from "@/lib/auth";
 import { AuthError } from "next-auth";
 import {
   loginSchema,
@@ -49,12 +49,12 @@ export const login = async (
     where: { email },
   });
 
-  if (existingUser && !existingUser.emailVerified) {
-    sendVerificationEmail(email, await generateEmailVerificationToken(email));
-    return {
-      error: "Please verify your email",
-    };
-  }
+  // if (existingUser && !existingUser.emailVerified) {
+  //   sendVerificationEmail(email, await generateEmailVerificationToken(email));
+  //   return {
+  //     error: "Please verify your email",
+  //   };
+  // }
 
   if (existingUser?.isTwoFactorEnabled) {
     if (secret) {
@@ -139,6 +139,10 @@ export const login = async (
   }
 };
 
+export const logout = async () => {
+  await signOut();
+};
+
 export const register = async (
   _previousState: FormStatus | null | undefined,
   formData: FormData
@@ -172,6 +176,7 @@ export const register = async (
   await prisma.user.create({
     data: {
       name,
+      username: email.split("@")[0].replace(/\./g, ""),
       email,
       hashedPassword,
     },

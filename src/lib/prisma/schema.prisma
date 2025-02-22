@@ -14,7 +14,8 @@ enum UserRole {
  
 model User {
   id            String          @id @default(cuid())
-  name          String?
+  name      String?
+  username      String?         @unique
   image         String?
   email         String          @unique
   emailVerified DateTime?
@@ -25,13 +26,12 @@ model User {
   
   accounts      Account[]
   sessions      Session[]
-  // Optional for WebAuthn support
   Authenticator Authenticator[]
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  takes          Take[]
+  Posts          Post[]
   arguments      Argument[]
   votes          Vote[]
   followedUsers  Follow[]  @relation("FollowingUsers")
@@ -112,8 +112,7 @@ model TwoFactorConfirmation {
 
   @@unique([userId])
 }
- 
-//Optional for WebAuthn support
+
 model Authenticator {
   credentialID         String  @unique
   userId               String
@@ -129,13 +128,13 @@ model Authenticator {
   @@id([userId, credentialID])
 }
 
-model Take {
+model Post {
   id        Int        @id @default(autoincrement())
-  author    User       @relation(fields: [authorId], references: [id])
-  authorId  String
-  status    TakeStatus
+  user    User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String
+  status    PostStatus?
   content   String
-  topics    Topic[]    @relation("TakeTopics")
+  topics    Topic[]    @relation("PostTopics")
   arguments Argument[]
   createdAt DateTime   @default(now())
   closedAt  DateTime?
@@ -143,10 +142,10 @@ model Take {
 
 model Argument {
   id        Int        @id @default(autoincrement())
-  author    User       @relation(fields: [authorId], references: [id])
-  authorId  String
-  take      Take       @relation(fields: [takeId], references: [id])
-  takeId    Int
+  user    User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String
+  Post      Post       @relation(fields: [PostId], references: [id], onDelete: Cascade)
+  PostId    Int
   type      ArgumentType
   content   String
   votes     Vote[]
@@ -155,36 +154,36 @@ model Argument {
 
 model Vote {
   id         Int        @id @default(autoincrement())
-  user       User       @relation(fields: [userId], references: [id])
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
-  argument   Argument   @relation(fields: [argumentId], references: [id])
+  argument   Argument   @relation(fields: [argumentId], references: [id], onDelete: Cascade)
   argumentId Int
   value      Int        // 1 for upvote, -1 for downvote
   createdAt  DateTime   @default(now())
 
-  @@unique([userId, argumentId]) // Prevents duplicate votes per argument
+  @@unique([userId, argumentId]) 
 }
 
 model Topic {
   id        Int      @id @default(autoincrement())
   name      String   @unique
-  takes     Take[]   @relation("TakeTopics")
+  Posts     Post[]   @relation("PostTopics")
   followers User[]   @relation("UserFollowedTopics")
   createdAt DateTime @default(now())
 }
 
 model Follow {
   id         Int      @id @default(autoincrement())
-  follower   User     @relation("FollowingUsers", fields: [followerId], references: [id])
+  follower   User     @relation("FollowingUsers", fields: [followerId], references: [id], onDelete: Cascade)
   followerId String
-  followed   User     @relation("FollowerUsers", fields: [followedId], references: [id])
+  followed   User     @relation("FollowerUsers", fields: [followedId], references: [id], onDelete: Cascade)
   followedId String
   createdAt  DateTime @default(now())
 
-  @@unique([followerId, followedId]) // Prevents duplicate follows
+  @@unique([followerId, followedId]) 
 }
 
-enum TakeStatus {
+enum PostStatus {
   OPEN
   CLOSED
 }

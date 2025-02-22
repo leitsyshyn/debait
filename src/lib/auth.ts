@@ -37,7 +37,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       const existingUser = await prisma.user.findUnique({
         where: { id: user.id },
       });
-      if (!existingUser?.emailVerified) return false;
+      // if (!existingUser?.emailVerified) return false;
 
       if (existingUser?.isTwoFactorEnabled) {
         const twoFactorConfirmation =
@@ -58,17 +58,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       //   where: { id: token.sub },
       // });
       // token.role = existingUser?.role;
-      if (user) token.role = user.role;
+      if (user) {
+        token.role = user.role;
+        token.id = user.id;
+      }
+
       return token;
     },
     async session({ session, token }) {
-      // if (token?.sub && session.user) {
-      //   session.user.id = token.sub;
-      // }
-      // if (token?.role && session.user) {
-      //   session.user.role = token.role;
-      // }
-      session.user.role = token.role;
+      if (token?.sub && session.user) {
+        session.user.id = token.sub;
+      }
+      if (token?.role && session.user) {
+        session.user.role = token.role;
+      }
       return session;
     },
   },

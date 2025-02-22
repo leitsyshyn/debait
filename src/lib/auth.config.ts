@@ -8,7 +8,19 @@ import { prisma } from "@/lib/prisma";
 // Notice this is only an object, not a full Auth.js instance
 export default {
   providers: [
-    GitHub,
+    GitHub({
+      clientId: process.env.AUTH_GITHUB_ID,
+      clientSecret: process.env.AUTH_GITHUB_SECRET,
+      profile(profile) {
+        return {
+          id: profile.id.toString(),
+          email: profile.email,
+          name: profile.name,
+          image: profile.avatar_url,
+          username: profile.login,
+        };
+      },
+    }),
     Credentials({
       credentials: {
         email: { label: "Email", type: "email" },
