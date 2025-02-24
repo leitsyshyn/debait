@@ -10,41 +10,33 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormMessage,
 } from "../ui/form";
+import { Button } from "../ui/button";
 import TextEditor from "./text-editor";
 import { createPostSchema } from "@/lib/schemas";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { startTransition, useActionState } from "react";
-import { submitPost } from "@/actions/feed/posts";
-import { Button } from "../ui/button";
+import { useSubmitPostMutation } from "@/mutations/mutations";
+import { useRef } from "react";
 
 const CreatePostForm = () => {
+  const mutation = useSubmitPostMutation();
+  const editorRef = useRef<{ clearContent: () => void } | null>(null);
   const form = useForm<z.infer<typeof createPostSchema>>({
     resolver: zodResolver(createPostSchema),
-    defaultValues: {
-      content: "",
-    },
+    defaultValues: { content: "" },
     mode: "onTouched",
   });
 
-  const [_, formAction, isPending] = useActionState(submitPost, null);
-
-  const onSubmit = (data: { content: string }) => {
-    console.log(data);
-    startTransition(() => {
-      if (data.content.trim() !== "") {
-        const formData = new FormData();
-        formData.append("content", data.content);
-
-        formAction(formData);
-      }
-    });
+  const onSubmit = (data: z.infer<typeof createPostSchema>) => {
+    if (!data.content.trim()) return;
+    mutation.mutate(data.content);
+    form.reset();
+    editorRef.current?.clearContent();
   };
 
   return (
@@ -56,11 +48,6 @@ const CreatePostForm = () => {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-6">
-            <input
-              type="hidden"
-              name="content"
-              value={form.getValues("content")}
-            />
             <FormField
               control={form.control}
               name="content"
@@ -68,11 +55,11 @@ const CreatePostForm = () => {
                 <FormItem>
                   <FormControl>
                     <TextEditor
+                      ref={editorRef}
                       content={field.value}
-                      onChange={(value) => field.onChange(value)}
+                      onChange={(value) => form.setValue("content", value)}
                     />
                   </FormControl>
-                  <FormDescription></FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -81,9 +68,9 @@ const CreatePostForm = () => {
               type="submit"
               variant="default"
               className="w-full"
-              disabled={isPending}
+              disabled={mutation.isPending}
             >
-              {isPending ? "Creating..." : "Create post"}
+              {mutation.isPending ? "Creating..." : "Create post"}
             </Button>
           </form>
         </Form>

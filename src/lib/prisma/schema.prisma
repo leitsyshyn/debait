@@ -129,7 +129,7 @@ model Authenticator {
 }
 
 model Post {
-  id        Int        @id @default(autoincrement())
+  id        String        @id @default(cuid())
   user    User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  String
   status    PostStatus?
@@ -145,7 +145,7 @@ model Argument {
   user    User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  String
   Post      Post       @relation(fields: [PostId], references: [id], onDelete: Cascade)
-  PostId    Int
+  PostId    String
   type      ArgumentType
   content   String
   votes     Vote[]

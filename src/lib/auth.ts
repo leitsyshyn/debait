@@ -37,7 +37,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       const existingUser = await prisma.user.findUnique({
         where: { id: user.id },
       });
-      // if (!existingUser?.emailVerified) return false;
+
+      if (!existingUser?.emailVerified) return false;
 
       if (existingUser?.isTwoFactorEnabled) {
         const twoFactorConfirmation =

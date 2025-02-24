@@ -49,12 +49,12 @@ export const login = async (
     where: { email },
   });
 
-  // if (existingUser && !existingUser.emailVerified) {
-  //   sendVerificationEmail(email, await generateEmailVerificationToken(email));
-  //   return {
-  //     error: "Please verify your email",
-  //   };
-  // }
+  if (existingUser && !existingUser.emailVerified) {
+    sendVerificationEmail(email, await generateEmailVerificationToken(email));
+    return {
+      error: "Please verify your email",
+    };
+  }
 
   if (existingUser?.isTwoFactorEnabled) {
     if (secret) {
@@ -186,9 +186,11 @@ export const register = async (
 
   await sendVerificationEmail(email, verificationToken);
 
-  return {
-    success: "We have sent you an email to verify your account",
-  };
+  if (process.env.NEXT_PUBLIC_REQUIRE_EMAIL_CONFIRMATION) {
+    return {
+      success: "We have sent you an email to verify your account",
+    };
+  }
 };
 
 export const verifyEmail = async (
