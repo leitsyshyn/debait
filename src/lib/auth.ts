@@ -1,6 +1,6 @@
 import NextAuth, { type DefaultSession } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { prisma } from "@/lib/prisma";
+import { db } from "@/lib/prisma";
 import { v4 as _uuid } from "uuid";
 import {} from "next-auth/jwt";
 import authConfig from "@/lib/auth.config";
@@ -22,7 +22,7 @@ declare module "next-auth" {
   }
 }
 
-const adapter = PrismaAdapter(prisma);
+const adapter = PrismaAdapter(db);
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter,
@@ -34,19 +34,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async signIn({ user, account }) {
       if (account?.provider !== "credentials") return true;
-      const existingUser = await prisma.user.findUnique({
+      const existingUser = await db.user.findUnique({
         where: { id: user.id },
       });
 
       if (!existingUser?.emailVerified) return false;
 
       if (existingUser?.isTwoFactorEnabled) {
-        const twoFactorConfirmation =
-          await prisma.twoFactorConfirmation.findUnique({
+        const twoFactorConfirmation = await db.twoFactorConfirmation.findUnique(
+          {
             where: { userId: existingUser.id },
-          });
+          }
+        );
         if (!twoFactorConfirmation) return false;
-        await prisma.twoFactorConfirmation.delete({
+        await db.twoFactorConfirmation.delete({
           where: { userId: existingUser.id },
         });
       }
@@ -78,7 +79,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   events: {
     async linkAccount({ user }) {
-      await prisma.user.update({
+      await db.user.update({
         where: { id: user.id },
         data: { emailVerified: new Date() },
       });

@@ -1,9 +1,9 @@
+import bcrypt from "bcryptjs";
+import type { NextAuthConfig } from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Credentials from "next-auth/providers/credentials";
-import type { NextAuthConfig } from "next-auth";
-import { loginSchema } from "@/lib/schemas";
-import bcrypt from "bcryptjs";
-import { prisma } from "@/lib/prisma";
+import { db } from "@/lib/prisma";
+import { loginSchema } from "@/features/auth/lib/schemas";
 
 // Notice this is only an object, not a full Auth.js instance
 export default {
@@ -32,7 +32,7 @@ export default {
             credentials
           );
 
-          const user = await prisma.user.findFirst({
+          const user = await db.user.findFirst({
             where: {
               email: validatedCredentials.email,
             },

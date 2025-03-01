@@ -1,16 +1,14 @@
-import NextAuth from "next-auth";
-import authConfig from "@/lib/auth.config";
-
-const { auth } = NextAuth(authConfig);
-
+import { NextRequest, NextResponse } from "next/server";
+import NextAuth, { Session } from "next-auth";
 import {
   publicRoutes,
   authRoutes,
   apiAuthPrefix,
   DEFAULT_LOGIN_REDIRECT,
 } from "@/routes";
-import { NextRequest, NextResponse } from "next/server";
-import type { Session } from "next-auth";
+import authConfig from "@/lib/auth.config";
+
+const { auth } = NextAuth(authConfig);
 
 interface NextAuthRequest extends NextRequest {
   auth: Session | null;
