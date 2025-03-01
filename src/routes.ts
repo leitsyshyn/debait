@@ -6,4 +6,4 @@ export const authRoutes = [
   "/auth/reset-password",
 ];
 export const apiAuthPrefix = "/api/auth";
-export const DEFAULT_LOGIN_REDIRECT = "/feed";
+export const DEFAULT_LOGIN_REDIRECT = "/for-you-feed";
