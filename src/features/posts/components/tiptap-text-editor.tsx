@@ -18,7 +18,7 @@ const TextEditor = forwardRef(({ content, onChange }: TextEditorProps, ref) => {
     ],
     content,
     onUpdate: ({ editor }) => {
-      onChange(editor.getText({ blockSeparator: "\n" }));
+      onChange(editor.getHTML());
     },
     editorProps: {
       attributes: {

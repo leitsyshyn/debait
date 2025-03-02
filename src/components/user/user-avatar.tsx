@@ -4,11 +4,12 @@ import { UserRound } from "lucide-react";
 type UserAvatarProps = {
   image?: string;
   username?: string;
+  className?: string;
 };
 
-const UserAvatar = ({ image, username }: UserAvatarProps) => {
+const UserAvatar = ({ image, username, className }: UserAvatarProps) => {
   return (
-    <Avatar>
+    <Avatar className={className}>
       <AvatarImage src={image} alt={username} />
       <AvatarFallback>
         <UserRound />

@@ -10,6 +10,7 @@ type UserHoverCardProps = {
   image?: string;
   username: string;
   children: React.ReactNode;
+  className?: string;
 };
 
 const UserHoverCard = ({ image, username, children }: UserHoverCardProps) => {

@@ -11,21 +11,23 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
-import { MoreHorizontal, Trash } from "lucide-react";
+import { Flag, Info, MoreHorizontal, Trash } from "lucide-react";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../../../components/ui/dropdown-menu";
-import { useDeletePostMutation } from "@/features/posts/mutations/delete";
+} from "@/components/ui/dropdown-menu";
+import { useDeletePostMutation } from "@/features/posts/mutations/delete-post-mutation";
 import { useSession } from "next-auth/react";
 
-const MorePostOptions = ({
+const PostMore = ({
   postId,
   userId,
+  className,
 }: {
   postId: string;
   userId: string;
+  className?: string;
 }) => {
   const mutation = useDeletePostMutation();
   const session = useSession();
@@ -33,16 +35,24 @@ const MorePostOptions = ({
     <AlertDialog>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost">
+          <Button variant="ghost" className={className}>
             <MoreHorizontal />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          {userId == session?.data?.user.id && (
+          {userId == session?.data?.user.id ? (
             <DropdownMenuItem asChild>
               <AlertDialogTrigger asChild>
                 <Button variant="ghost" className="w-full">
                   <Trash /> Delete
+                </Button>
+              </AlertDialogTrigger>
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem asChild>
+              <AlertDialogTrigger asChild>
+                <Button variant="ghost" className="w-full">
+                  <Flag /> Report
                 </Button>
               </AlertDialogTrigger>
             </DropdownMenuItem>
@@ -74,4 +84,4 @@ const MorePostOptions = ({
   );
 };
 
-export default MorePostOptions;
+export default PostMore;

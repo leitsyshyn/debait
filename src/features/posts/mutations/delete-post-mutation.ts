@@ -6,7 +6,7 @@ import {
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import { deletePost } from "@/features/posts/actions/delete";
+import { deletePost } from "@/features/posts/actions/delete-post";
 
 export function useDeletePostMutation() {
   const queryClient = useQueryClient();

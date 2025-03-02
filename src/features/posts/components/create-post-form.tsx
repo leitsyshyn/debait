@@ -20,8 +20,8 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { createPostSchema } from "@/features/posts/lib/schemas";
-import { useSubmitPostMutation } from "@/features/posts/mutations/submit";
-import TextEditor from "@/features/posts/components/text-editor";
+import { useSubmitPostMutation } from "@/features/posts/mutations/submit-post-mutation";
+import TextEditor from "@/features/posts/components/tiptap-text-editor";
 
 const CreatePostForm = () => {
   const mutation = useSubmitPostMutation();

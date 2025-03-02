@@ -6,8 +6,10 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { PostsPage } from "@/lib/types";
 import InfiniteScrollContainer from "@/components/infinite-scroll-container";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function ForYouFeed() {
+  const router = useRouter();
   const {
     data,
     fetchNextPage,
@@ -35,11 +37,13 @@ export default function ForYouFeed() {
 
   return (
     <InfiniteScrollContainer
-      className="space-y-4"
+      className="flex flex-col gap-4"
       onBottomReached={() => hasNextPage && !isFetching && fetchNextPage()}
     >
       {posts.map((post) => (
-        <Post key={post.id} post={post}></Post>
+        <div key={post.id}>
+          <Post post={post}></Post>
+        </div>
       ))}
 
       {isFetchingNextPage && <Loader2 className="animate-spin mx-auto" />}

@@ -6,7 +6,7 @@ import {
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import { submitPost } from "@/features/posts/actions/submit";
+import { submitPost } from "@/features/posts/actions/submit-post";
 
 export function useSubmitPostMutation() {
   const queryClient = useQueryClient();
