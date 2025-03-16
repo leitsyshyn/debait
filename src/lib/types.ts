@@ -6,6 +6,16 @@ export function getUserDataSelect(sessionUserId: string) {
     username: true,
     name: true,
     image: true,
+    createdAt: true,
+    followers: {
+      where: { followerId: sessionUserId },
+      select: { followerId: true },
+    },
+    _count: {
+      select: {
+        followers: true,
+      },
+    },
   } satisfies Prisma.UserSelect;
 }
 
@@ -63,4 +73,9 @@ export interface VoteData {
   upvotes: number;
   downvotes: number;
   userVote: number | null;
+}
+
+export interface FollowData {
+  isFollowedByUser: boolean;
+  followers: number;
 }

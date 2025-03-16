@@ -35,7 +35,7 @@ const PostDialog = ({ post, children }: PostDialogProps) => {
           Post by {post.user.name} created at {post.createdAt.toISOString()}
         </DialogTitle>
         <PostHeader post={post} />
-        <div className="max-h-96 overflow-auto relative ">
+        <div className="max-h-96 overflow-auto relative mt-4">
           <div className="p-4 pt-0">
             <ReadMore lineClamp={3} text={post.content} />
           </div>
@@ -67,13 +67,13 @@ const PostDialog = ({ post, children }: PostDialogProps) => {
                 <PostComments post={post} />
               </TabsContent>
               <TabsContent value="support">
-                <PostComments post={post} />
+                <PostComments type="SUPPORT" post={post} />
               </TabsContent>
               <TabsContent value="oppose">
-                <PostComments post={post} />
+                <PostComments type="OPPOSE" post={post} />
               </TabsContent>
               <TabsContent value="clarify">
-                <PostComments post={post} />
+                <PostComments type="CLARIFY" post={post} />
               </TabsContent>
             </Tabs>
           </div>

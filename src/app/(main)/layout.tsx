@@ -8,7 +8,10 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <SidebarProvider defaultOpen={true}>
+    <SidebarProvider
+      style={{ "--sidebar-width": "16rem" } as React.CSSProperties}
+      defaultOpen={true}
+    >
       <AppSidebar />
       {children}
       <AppSidebarRight />

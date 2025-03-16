@@ -89,6 +89,7 @@ export const VoteButton = ({
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey });
+      queryClient.invalidateQueries({ queryKey: ["post-feed", "for-you"] });
     },
   });
 

@@ -1,20 +1,14 @@
 "use client";
 
+import Post from "../post/post";
 import kyInstance from "@/lib/ky";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { CommentsPage, PostData } from "@/lib/types";
+import { PostsPage } from "@/lib/types";
 import InfiniteScrollContainer from "@/components/infinite-scroll-container";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import Comment from "../comment/comment";
-import { CommentType } from "@prisma/client";
 
-interface PostCommentsProps {
-  post: PostData;
-  type?: CommentType | undefined;
-}
-
-export default function PostComments({ post, type }: PostCommentsProps) {
+export default function FollowingFeed() {
   const router = useRouter();
   const {
     data,
@@ -24,37 +18,35 @@ export default function PostComments({ post, type }: PostCommentsProps) {
     isFetchingNextPage,
     status,
   } = useInfiniteQuery({
-    queryKey: ["comments", post.id],
+    queryKey: ["post-feed", "following"],
     queryFn: ({ pageParam }) =>
       kyInstance
         .get(
-          `/api/posts/${[post.id]}/comments?${type ? `type=${type}` : ""}`,
+          "/api/posts/following-feed",
           pageParam ? { searchParams: { cursor: pageParam } } : {}
         )
-        .json<CommentsPage>(),
+        .json<PostsPage>(),
     initialPageParam: null as string | null,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
-  const comments = data?.pages.flatMap((page) => page.comments) || [];
+  const posts = data?.pages.flatMap((page) => page.posts) || [];
 
   if (status === "pending") return <Loader2 className="animate-spin mx-auto" />;
   if (status === "error") return <div>Error</div>;
 
+  console.log(status);
+
   return (
     <InfiniteScrollContainer
-      className="flex flex-col pb-4"
+      className="flex flex-col"
       onBottomReached={() => hasNextPage && !isFetching && fetchNextPage()}
     >
-      {comments.length > 0 ? (
-        comments.map((comment) => (
-          <div key={comment.id}>
-            <Comment comment={comment}></Comment>
-          </div>
-        ))
-      ) : (
-        <div className="mx-auto p-4 pb-0 h-12 text-center">No comments</div>
-      )}
+      {posts.map((post) => (
+        <div key={post.id}>
+          <Post post={post}></Post>
+        </div>
+      ))}
 
       {isFetchingNextPage && <Loader2 className="animate-spin mx-auto" />}
     </InfiniteScrollContainer>

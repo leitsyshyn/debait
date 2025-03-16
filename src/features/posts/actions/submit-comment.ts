@@ -23,6 +23,8 @@ export const submitComment = async ({
   const commentType =
     post.userVote == 1 ? "SUPPORT" : post.userVote == -1 ? "OPPOSE" : "CLARIFY";
 
+  console.log("commentType", commentType);
+
   const newComment = await db.comment.create({
     data: {
       content: validatedContent,
@@ -32,6 +34,8 @@ export const submitComment = async ({
     },
     include: getCommentDataInclude(session.user.id),
   });
+
+  console.log("newComment", newComment);
 
   return newComment;
 };

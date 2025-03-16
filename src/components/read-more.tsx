@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
+import Linkify from "./linkify";
 
 type ReadMoreProps = {
   text?: string;
@@ -20,23 +21,25 @@ const ReadMore = ({ text, lineClamp }: ReadMoreProps) => {
 
   const toggleExpand = () => setIsExpanded((prev) => !prev);
   return (
-    <div>
-      <div
-        className={isExpanded ? "" : `line-clamp-[${lineClamp}]`}
-        ref={textRef}
-      >
-        {text}
-      </div>
-      {showButton && (
-        <Button
-          variant="link"
-          onClick={toggleExpand}
-          className="p-0 max-h-fit text-muted-foreground"
+    <Linkify>
+      <div>
+        <div
+          className={isExpanded ? "" : `line-clamp-[${lineClamp}]`}
+          ref={textRef}
         >
-          {isExpanded ? "Read less" : "Read more"}
-        </Button>
-      )}
-    </div>
+          {text}
+        </div>
+        {showButton && (
+          <Button
+            variant="link"
+            onClick={toggleExpand}
+            className="p-0 max-h-fit text-muted-foreground"
+          >
+            {isExpanded ? "Read less" : "Read more"}
+          </Button>
+        )}
+      </div>
+    </Linkify>
   );
 };
 

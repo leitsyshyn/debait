@@ -2,14 +2,19 @@ import { NextResponse, NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { getCommentDataInclude, CommentsPage } from "@/lib/types";
+import { CommentType } from "@prisma/client";
 
 export async function GET(
   req: NextRequest,
-  context: { params: { postId: string } }
+  context: { params: Promise<{ postId: string }> }
 ) {
   const { postId } = await context.params;
   try {
     const cursor = req.nextUrl.searchParams.get("cursor") || undefined;
+
+    const type = req.nextUrl.searchParams.get("type") as
+      | CommentType
+      | undefined;
 
     const pageSize = 5;
 
@@ -19,7 +24,10 @@ export async function GET(
     }
 
     const comments = await db.comment.findMany({
-      where: { postId },
+      where: {
+        postId,
+        ...(type && { type }),
+      },
       include: getCommentDataInclude(session.user.id),
       orderBy: { createdAt: "desc" },
       take: pageSize + 1,

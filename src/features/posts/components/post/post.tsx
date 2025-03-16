@@ -49,7 +49,8 @@ const Post = ({ post }: PostProps) => {
         className="absolute inset-0 z-0"
         aria-label="Go to post"
       /> */}
-      <div className="[&>*]:[&>*]:z-10 ">
+      {/* <div className="[&>*]:[&>*]:z-10 "> */}
+      <div className="flex flex-col gap-2">
         <PostHeader post={post} />
         <CardContent className="px-4 pb-0">
           <ReadMore text={post.content} lineClamp={3} />

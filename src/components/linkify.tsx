@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LinkIt, LinkItUrl } from "react-linkify-it";
+import { Badge } from "./ui/badge";
 
 interface LinkifyProps {
   children: React.ReactNode;
@@ -39,9 +40,9 @@ function LinkifyHashtag({ children }: LinkifyProps) {
     <LinkIt
       regex={/(#[a-zA-Z0-9_-]+)/}
       component={(match, key) => (
-        <Link key={key} href={`/${match.slice(1)}`}>
-          {match}
-        </Link>
+        <Badge variant="secondary" key={key}>
+          <Link href={`/${match.slice(1)}`}>{match}</Link>
+        </Badge>
       )}
     >
       {children}

@@ -34,8 +34,8 @@ model User {
   posts          Post[]
   arguments      Comment[]
   votes          Vote[]
-  followedUsers  Follow[]  @relation("FollowingUsers")
-  followingUsers Follow[]  @relation("FollowerUsers")
+  following  Follow[]  @relation("Following")
+  followers Follow[]  @relation("Followers")
   followedTags Tag[]   @relation("UserFollowedTags")
 }
  
@@ -173,13 +173,13 @@ model Tag {
 
 model Follow {
   id         Int      @id @default(autoincrement())
-  follower   User     @relation("FollowingUsers", fields: [followerId], references: [id], onDelete: Cascade)
+  follower   User     @relation("Following", fields: [followerId], references: [id], onDelete: Cascade)
   followerId String
-  followed   User     @relation("FollowerUsers", fields: [followedId], references: [id], onDelete: Cascade)
-  followedId String
+  following   User     @relation("Followers", fields: [followindId], references: [id], onDelete: Cascade)
+  followindId String @map("followedId")
   createdAt  DateTime @default(now())
 
-  @@unique([followerId, followedId]) 
+  @@unique([followerId, followindId]) 
 }
 
 enum PostStatus {

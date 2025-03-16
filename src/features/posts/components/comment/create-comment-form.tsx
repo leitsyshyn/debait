@@ -45,6 +45,7 @@ const CreateCommentForm = ({
 
   const onSubmit = (data: z.infer<typeof createCommentSchema>) => {
     if (!data.content.trim()) return;
+    console.log("post", post);
     mutation.mutate(
       {
         post,

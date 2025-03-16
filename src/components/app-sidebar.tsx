@@ -75,7 +75,7 @@ export function AppSidebar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link href="/feed/for-you">
+                  <Link href="/">
                     <Home />
                     Home
                   </Link>
@@ -83,7 +83,7 @@ export function AppSidebar() {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link href="/for-you-feed">
+                  <Link href="/">
                     <Search />
                     Explore
                   </Link>
@@ -91,7 +91,7 @@ export function AppSidebar() {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link href="/for-you-feed">
+                  <Link href="/">
                     <Pin />
                     Saved
                   </Link>
@@ -99,7 +99,7 @@ export function AppSidebar() {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link href="/for-you-feed">
+                  <Link href="/">
                     <Bell />
                     Notifications
                   </Link>
