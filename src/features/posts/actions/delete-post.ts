@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { PostDataInclude } from "@/lib/types";
+import { getPostDataInclude } from "@/lib/types";
 
 export const deletePost = async (id: string) => {
   const session = await auth();
@@ -24,7 +24,7 @@ export const deletePost = async (id: string) => {
 
   const deletedPost = await db.post.delete({
     where: { id },
-    include: PostDataInclude,
+    include: getPostDataInclude(session.user.id),
   });
 
   return deletedPost;

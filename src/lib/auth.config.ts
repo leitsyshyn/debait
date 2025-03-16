@@ -53,7 +53,10 @@ export default {
 
           const { hashedPassword: _, ...userWithoutPassword } = user;
 
-          return userWithoutPassword;
+          return {
+            ...userWithoutPassword,
+            username: user.username ?? undefined,
+          };
         } catch (error) {
           console.error("Error authorizing credentials:", error);
           return null;

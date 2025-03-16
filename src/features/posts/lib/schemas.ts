@@ -6,3 +6,10 @@ export const createPostSchema = object({
     "Content is required"
   ),
 });
+
+export const createCommentSchema = object({
+  content: string({ required_error: "Content is required" }).min(
+    1,
+    "Content is required"
+  ),
+});

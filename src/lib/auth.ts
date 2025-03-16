@@ -8,16 +8,19 @@ import { UserRole } from "@prisma/client";
 declare module "next-auth/jwt" {
   interface JWT {
     role?: UserRole;
+    username?: string;
   }
 }
 
 declare module "next-auth" {
   interface User {
     role?: UserRole;
+    username?: string;
   }
   interface Session {
     user: {
       role?: UserRole;
+      username?: string;
     } & DefaultSession["user"];
   }
 }
@@ -63,6 +66,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (user) {
         token.role = user.role;
         token.id = user.id;
+        token.username = user.username;
       }
 
       return token;
@@ -73,6 +77,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       if (token?.role && session.user) {
         session.user.role = token.role;
+      }
+      if (token?.username && session.user) {
+        session.user.username = token.username;
       }
       return session;
     },

@@ -31,12 +31,12 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  Posts          Post[]
-  arguments      Argument[]
+  posts          Post[]
+  arguments      Comment[]
   votes          Vote[]
   followedUsers  Follow[]  @relation("FollowingUsers")
   followingUsers Follow[]  @relation("FollowerUsers")
-  followedTopics Topic[]   @relation("UserFollowedTopics")
+  followedTags Tag[]   @relation("UserFollowedTags")
 }
  
 model Account {
@@ -134,41 +134,39 @@ model Post {
   userId  String
   status    PostStatus?
   content   String
-  topics    Topic[]    @relation("PostTopics")
-  arguments Argument[]
+  tags    Tag[]    @relation("PostTags")
+  comments Comment[]
+  votes     Vote[]
   createdAt DateTime   @default(now())
   closedAt  DateTime?
 }
 
-model Argument {
-  id        Int        @id @default(autoincrement())
+model Comment {
+  id        String    @id @default(cuid())
   user    User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  String
-  Post      Post       @relation(fields: [PostId], references: [id], onDelete: Cascade)
-  PostId    String
-  type      ArgumentType
+  post      Post       @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String 
   content   String
-  votes     Vote[]
   createdAt DateTime   @default(now())
 }
 
 model Vote {
-  id         Int        @id @default(autoincrement())
   user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
-  argument   Argument   @relation(fields: [argumentId], references: [id], onDelete: Cascade)
-  argumentId Int
-  value      Int        // 1 for upvote, -1 for downvote
+  post       Post       @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId     String 
+  value      Int
   createdAt  DateTime   @default(now())
 
-  @@unique([userId, argumentId]) 
+  @@unique([postId, userId]) 
 }
 
-model Topic {
+model Tag {
   id        Int      @id @default(autoincrement())
   name      String   @unique
-  Posts     Post[]   @relation("PostTopics")
-  followers User[]   @relation("UserFollowedTopics")
+  Posts     Post[]   @relation("PostTags")
+  followers User[]   @relation("UserFollowedTags")
   createdAt DateTime @default(now())
 }
 
@@ -188,7 +186,8 @@ enum PostStatus {
   CLOSED
 }
 
-enum ArgumentType {
+enum CommentType {
   SUPPORT
-  CRITIQUE
+  OPPOSE
+  CLARIFY
 }

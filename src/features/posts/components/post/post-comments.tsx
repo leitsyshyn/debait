@@ -1,14 +1,18 @@
 "use client";
 
-import Post from "./post";
 import kyInstance from "@/lib/ky";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { PostsPage } from "@/lib/types";
+import { CommentsPage, PostData } from "@/lib/types";
 import InfiniteScrollContainer from "@/components/infinite-scroll-container";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Comment from "../comment/comment";
 
-export default function ForYouFeed() {
+interface PostCommentsProps {
+  post: PostData;
+}
+
+export default function PostComments({ post }: PostCommentsProps) {
   const router = useRouter();
   const {
     data,
@@ -18,33 +22,37 @@ export default function ForYouFeed() {
     isFetchingNextPage,
     status,
   } = useInfiniteQuery({
-    queryKey: ["post-feed", "for-you"],
+    queryKey: ["comments", post.id],
     queryFn: ({ pageParam }) =>
       kyInstance
         .get(
-          "/api/posts/for-you-feed",
+          `/api/posts/${[post.id]}/comments`,
           pageParam ? { searchParams: { cursor: pageParam } } : {}
         )
-        .json<PostsPage>(),
+        .json<CommentsPage>(),
     initialPageParam: null as string | null,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
-  const posts = data?.pages.flatMap((page) => page.posts) || [];
+  const comments = data?.pages.flatMap((page) => page.comments) || [];
 
   if (status === "pending") return <Loader2 className="animate-spin mx-auto" />;
   if (status === "error") return <div>Error</div>;
 
   return (
     <InfiniteScrollContainer
-      className="flex flex-col gap-4"
+      className="flex flex-col pb-4"
       onBottomReached={() => hasNextPage && !isFetching && fetchNextPage()}
     >
-      {posts.map((post) => (
-        <div key={post.id}>
-          <Post post={post}></Post>
-        </div>
-      ))}
+      {comments.length > 0 ? (
+        comments.map((comment) => (
+          <div key={comment.id}>
+            <Comment comment={comment}></Comment>
+          </div>
+        ))
+      ) : (
+        <div className="mx-auto p-4 pb-0 text-base">No comments</div>
+      )}
 
       {isFetchingNextPage && <Loader2 className="animate-spin mx-auto" />}
     </InfiniteScrollContainer>
