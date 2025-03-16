@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { getCommentDataInclude } from "@/lib/types";
+import { getCommentDataInclude, PostDataWithVotes } from "@/lib/types";
 import { createCommentSchema } from "@/features/posts/lib/schemas";
 import { PostData } from "@/lib/types";
 
@@ -10,7 +10,7 @@ export const submitComment = async ({
   post,
   content,
 }: {
-  post: PostData;
+  post: PostDataWithVotes;
   content: string;
 }) => {
   const session = await auth();
@@ -20,11 +20,15 @@ export const submitComment = async ({
 
   const { content: validatedContent } = createCommentSchema.parse({ content });
 
+  const commentType =
+    post.userVote == 1 ? "SUPPORT" : post.userVote == -1 ? "OPPOSE" : "CLARIFY";
+
   const newComment = await db.comment.create({
     data: {
       content: validatedContent,
       postId: post.id,
       userId: session.user.id,
+      type: commentType,
     },
     include: getCommentDataInclude(session.user.id),
   });

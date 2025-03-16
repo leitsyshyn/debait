@@ -1,7 +1,7 @@
 import { CommentData } from "@/lib/types";
 import CommentMore from "./comment-more-alert-dialog";
 import { CardDescription, CardTitle } from "@/components/ui/card";
-import { CornerDownRight } from "lucide-react";
+import { CornerDownRight, HeartHandshake, Swords } from "lucide-react";
 import UserLink from "@/components/user/user-link";
 import UserAvatar from "@/components/user/user-avatar";
 import { formatRelativeDate } from "../../lib/utils";
@@ -20,10 +20,15 @@ const Comment = ({ comment }: CommentProps) => {
         image={comment.user.image ?? ""}
       />
       <div className="min-w-0 flex flex-col flex-1 ">
-        <div className="flex flex-row gap-2 items-baseline">
+        <div className="flex flex-row gap-2 items-center">
           <UserLink username={comment.user.username ?? ""} className="min-w-0 ">
             <CardTitle className="truncate">{comment.user.name}</CardTitle>
           </UserLink>
+          {comment.type === "SUPPORT" ? (
+            <HeartHandshake size="1rem" />
+          ) : comment.type === "OPPOSE" ? (
+            <Swords size="1rem" />
+          ) : null}
           <CardDescription>•</CardDescription>
 
           <CardDescription className="whitespace-nowrap">

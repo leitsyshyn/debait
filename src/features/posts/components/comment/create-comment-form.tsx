@@ -21,7 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { createCommentSchema } from "@/features/posts/lib/schemas";
 import { useSubmitCommentMutation } from "@/features/posts/mutations/submit-comment-mutation";
-import { PostData } from "@/lib/types";
+import { PostData, PostDataWithVotes } from "@/lib/types";
 import { Input } from "@/components/ui/input";
 import { Loader, Loader2, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -31,7 +31,7 @@ const CreateCommentForm = ({
   autoFocus,
   className,
 }: {
-  post: PostData;
+  post: PostDataWithVotes;
   autoFocus?: boolean;
   className?: string;
 }) => {
