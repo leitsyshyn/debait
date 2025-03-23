@@ -34,6 +34,7 @@ model User {
   posts          Post[]
   arguments      Comment[]
   votes          Vote[]
+  commentVotes   CommentVote[]
   following  Follow[]  @relation("Following")
   followers Follow[]  @relation("Followers")
   followedTags Tag[]   @relation("UserFollowedTags")
@@ -140,18 +141,6 @@ model Post {
   createdAt DateTime   @default(now())
   closedAt  DateTime?
 }
-
-model Comment {
-  id        String    @id @default(cuid())
-  user    User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId  String
-  post      Post       @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId    String 
-  content   String
-  type      CommentType
-  createdAt DateTime   @default(now())
-}
-
 model Vote {
   user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
@@ -162,6 +151,29 @@ model Vote {
 
   @@unique([postId, userId]) 
 }
+model Comment {
+  id        String    @id @default(cuid())
+  user    User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String
+  post      Post       @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String 
+  content   String
+  type      CommentType
+  votes     CommentVote[]
+  createdAt DateTime   @default(now())
+}
+model CommentVote {
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  comment    Comment    @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId  String 
+  value      Int
+  createdAt  DateTime   @default(now())
+
+  @@unique([commentId, userId]) 
+}
+
+
 
 model Tag {
   id        Int      @id @default(autoincrement())

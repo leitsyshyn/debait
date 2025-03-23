@@ -32,7 +32,12 @@ export default function UserFeed({ userId }: { userId: string }) {
 
   const posts = data?.pages.flatMap((page) => page.posts) || [];
 
-  if (status === "pending") return <Loader2 className="animate-spin mx-auto" />;
+  if (status === "pending")
+    return (
+      <div className="flex items-center justify-center h-16">
+        <Loader2 className="animate-spin m-auto" />
+      </div>
+    );
   if (status === "error") return <div>Error</div>;
 
   return (
@@ -46,7 +51,11 @@ export default function UserFeed({ userId }: { userId: string }) {
         </div>
       ))}
 
-      {isFetchingNextPage && <Loader2 className="animate-spin mx-auto" />}
+      {isFetchingNextPage && (
+        <div className="flex items-center justify-center h-16">
+          <Loader2 className="animate-spin m-auto" />
+        </div>
+      )}
     </InfiniteScrollContainer>
   );
 }

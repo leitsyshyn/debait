@@ -10,6 +10,8 @@ import PostHeader from "./post-header";
 import CreateCommentForm from "../comment/create-comment-form";
 import PostComments from "./post-comments";
 import {
+  ChartArea,
+  ChartBar,
   Cloud,
   CloudLightning,
   HeartHandshake,
@@ -20,6 +22,16 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { VoteButton } from "./vote-button";
 import ReadMore from "@/components/read-more";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import PostChart from "./post-chart";
 
 interface PostDialogProps {
   post: PostDataWithVotes;
@@ -27,6 +39,8 @@ interface PostDialogProps {
 }
 
 const PostDialog = ({ post, children }: PostDialogProps) => {
+  const [sortBy, setSortBy] = useState<"top" | "new">("new");
+  const queryClient = useQueryClient();
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -42,6 +56,23 @@ const PostDialog = ({ post, children }: PostDialogProps) => {
           <div>
             <Tabs defaultValue="all">
               <TabsList className="flex sticky top-0 z-10 gap-2 p-6 rounded-none border-y">
+                <Select
+                  value={sortBy}
+                  onValueChange={(value) => {
+                    setSortBy(value as "top" | "new");
+                    queryClient.invalidateQueries({
+                      queryKey: ["comments", post.id],
+                    });
+                  }}
+                >
+                  <SelectTrigger className="bg-white w-fit max-w-[5rem]">
+                    <SelectValue placeholder="Sort" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="new">New</SelectItem>
+                    <SelectItem value="top">Top</SelectItem>
+                  </SelectContent>
+                </Select>
                 <TabsTrigger value="all" asChild>
                   <Button variant="ghost">
                     <MessagesSquare /> All
@@ -62,18 +93,26 @@ const PostDialog = ({ post, children }: PostDialogProps) => {
                     <CloudLightning /> Clarify
                   </Button>
                 </TabsTrigger>
+                <TabsTrigger value="stats" asChild>
+                  <Button variant="ghost">
+                    <ChartArea /> Stats
+                  </Button>
+                </TabsTrigger>
               </TabsList>
               <TabsContent value="all">
-                <PostComments post={post} />
+                <PostComments post={post} sortBy={sortBy} />
               </TabsContent>
               <TabsContent value="support">
-                <PostComments type="SUPPORT" post={post} />
+                <PostComments type="SUPPORT" post={post} sortBy={sortBy} />
               </TabsContent>
               <TabsContent value="oppose">
-                <PostComments type="OPPOSE" post={post} />
+                <PostComments type="OPPOSE" post={post} sortBy={sortBy} />
               </TabsContent>
               <TabsContent value="clarify">
-                <PostComments type="CLARIFY" post={post} />
+                <PostComments type="CLARIFY" post={post} sortBy={sortBy} />
+              </TabsContent>
+              <TabsContent value="stats">
+                <PostChart votes={post.votes} />
               </TabsContent>
             </Tabs>
           </div>

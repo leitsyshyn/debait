@@ -1,3 +1,4 @@
+import { TestChart } from "@/components/charts/test-chart";
 import FollowerCount from "@/components/follower-count";
 import { Button } from "@/components/ui/button";
 import {
@@ -45,6 +46,12 @@ const Page = async ({ params }: { params: Promise<{ username: string }> }) => {
     return null;
   }
 
+  const [supportCount, opposeCount, clarifyCount] = await Promise.all([
+    db.comment.count({ where: { userId: user.id, type: "SUPPORT" } }),
+    db.comment.count({ where: { userId: user.id, type: "OPPOSE" } }),
+    db.comment.count({ where: { userId: user.id, type: "CLARIFY" } }),
+  ]);
+
   return (
     <>
       {/* <div className="flex flex-1 min-h-svh flex-col  gap-6 bg-muted">
@@ -53,22 +60,18 @@ const Page = async ({ params }: { params: Promise<{ username: string }> }) => {
 
       <div className="flex flex-1 min-h-svh flex-col">
         <div className="flex w-full flex-col">
-          <Card className="flex flex-col rounded-none shadow-none border-none border-b p-4 gap-8 ">
-            <UserAvatar
-              className="size-36"
-              username={user?.username ?? ""}
-              image={user?.image ?? ""}
-            />
-            <div className="justify-between flex flex-row gap-4 items-center">
-              <div className="flex flex-col gap-1">
-                <CardTitle>{user?.name}</CardTitle>
-                <CardDescription>@{user?.username}</CardDescription>
-              </div>
+          <Card className="flex flex-row rounded-none shadow-none border-none border-b p-4 gap-8 items-end">
+            <div className="flex flex-col gap-4">
+              <UserAvatar
+                className="size-36"
+                username={user?.username ?? ""}
+                image={user?.image ?? ""}
+              />{" "}
               {session.user.id != user.id ? (
                 <FollowButton
                   userId={user?.id ?? ""}
                   initialState={{
-                    followers: user._count.followers,
+                    followersCount: user._count.followers,
                     isFollowedByUser: user.followers.some(
                       (follower) => follower.followerId === session.user.id
                     ),
@@ -80,23 +83,36 @@ const Page = async ({ params }: { params: Promise<{ username: string }> }) => {
                 </Button>
               )}
             </div>
-            <div>
-              <div>
-                <FollowerCount
-                  userId={user.id}
-                  initialData={{
-                    followers: user._count.followers,
-                    isFollowedByUser: user.followers.some(
-                      (follower) => follower.followerId === session.user.id
-                    ),
-                  }}
-                />{" "}
-                followers
+            <div className="flex flex-col gap-1 justify-end">
+              <div className="space-y-1">
+                <CardTitle>{user?.name}</CardTitle>
+                <CardDescription>@{user?.username}</CardDescription>
               </div>
               <div>
-                joined {formatDate(new Date(user.createdAt), "dd MMMM yyyy")}
+                <div>
+                  <FollowerCount
+                    userId={user.id}
+                    initialData={{
+                      followersCount: user._count.followers,
+                      isFollowedByUser: user.followers.some(
+                        (follower) => follower.followerId === session.user.id
+                      ),
+                    }}
+                  />{" "}
+                  followers
+                </div>
+                <div>
+                  joined {formatDate(new Date(user.createdAt), "dd MMMM yyyy")}
+                </div>
               </div>
             </div>
+
+            <TestChart
+              user={user}
+              supportCount={supportCount}
+              opposeCount={opposeCount}
+              clarifyCount={clarifyCount}
+            />
           </Card>
           <UserFeed userId={user.id} />
         </div>

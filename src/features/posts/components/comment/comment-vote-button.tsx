@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import kyInstance from "@/lib/ky";
-import { VoteData } from "@/lib/types";
+import { CommentVoteData, VoteData } from "@/lib/types";
 
 import {
   QueryKey,
@@ -18,22 +18,26 @@ import {
 
 interface VoteButtonsProps {
   postId: string;
-  initialData: VoteData;
+  commentId: string;
+  initialData: CommentVoteData;
   value: number;
 }
 
-export const VoteButton = ({
+export const CommentVoteButton = ({
   postId,
+  commentId,
   initialData,
   value,
 }: VoteButtonsProps) => {
   const queryClient = useQueryClient();
-  const queryKey: QueryKey = ["votes", postId];
+  const queryKey: QueryKey = ["commentVotes", postId, commentId];
 
   const { data } = useQuery({
     queryKey,
     queryFn: () =>
-      kyInstance.get(`/api/posts/${postId}/votes`).json<VoteData>(),
+      kyInstance
+        .get(`/api/posts/${postId}/comments/${commentId}/votes`)
+        .json<VoteData>(),
     initialData,
     staleTime: Infinity,
   });
@@ -41,15 +45,20 @@ export const VoteButton = ({
   const voteMutation = useMutation({
     mutationFn: (voteValue: number) => {
       if (data.userVote === voteValue) {
-        return kyInstance.delete(`/api/posts/${postId}/votes`);
+        return kyInstance.delete(
+          `/api/posts/${postId}/comments/${commentId}/votes`
+        );
       }
-      return kyInstance.post(`/api/posts/${postId}/votes`, {
-        json: { value: voteValue },
-      });
+      return kyInstance.post(
+        `/api/posts/${postId}/comments/${commentId}/votes`,
+        {
+          json: { value: voteValue },
+        }
+      );
     },
     onMutate: async (voteValue: number) => {
       await queryClient.cancelQueries({ queryKey });
-      const previousData = queryClient.getQueryData<VoteData>(queryKey);
+      const previousData = queryClient.getQueryData<CommentVoteData>(queryKey);
 
       let newUpvotes = previousData?.upvotes || 0;
       let newDownvotes = previousData?.downvotes || 0;
@@ -74,7 +83,7 @@ export const VoteButton = ({
         }
       }
 
-      queryClient.setQueryData<VoteData>(queryKey, {
+      queryClient.setQueryData<CommentVoteData>(queryKey, {
         userVote: newUserVote,
         upvotes: newUpvotes,
         downvotes: newDownvotes,
@@ -89,7 +98,9 @@ export const VoteButton = ({
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey });
-      queryClient.invalidateQueries({ queryKey: ["post-feed", "for-you"] });
+      queryClient.invalidateQueries({
+        queryKey: ["post-feed", "for-you", "following"],
+      });
     },
   });
 
@@ -102,12 +113,12 @@ export const VoteButton = ({
               <Button
                 variant="ghost"
                 onClick={() => voteMutation.mutate(1)}
-                className="group"
+                className="group/button"
               >
                 {data.userVote === 1 ? (
                   <HeartHandshake color="hsl(var(--support))" />
                 ) : (
-                  <HeartHandshake className="group-hover:text-[hsl(var(--support))]" />
+                  <HeartHandshake className="group-hover/button:text-[hsl(var(--support))]" />
                 )}
                 {data.upvotes}
               </Button>
@@ -120,14 +131,14 @@ export const VoteButton = ({
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                className="group"
+                className="group/button"
                 variant="ghost"
                 onClick={() => voteMutation.mutate(-1)}
               >
                 {data.userVote === -1 ? (
                   <Swords color="hsl(var(--oppose))" />
                 ) : (
-                  <Swords className="group-hover:text-[hsl(var(--oppose))]" />
+                  <Swords className="group-hover/button:text-[hsl(var(--oppose))]" />
                 )}
                 {data.downvotes}
               </Button>

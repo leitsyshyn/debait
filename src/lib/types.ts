@@ -14,9 +14,16 @@ export function getUserDataSelect(sessionUserId: string) {
     _count: {
       select: {
         followers: true,
+        posts: true,
+        arguments: true,
+        votes: true,
       },
     },
   } satisfies Prisma.UserSelect;
+}
+export interface FollowData {
+  isFollowedByUser: boolean;
+  followersCount: number;
 }
 
 export function getPostDataInclude(sessionUserId: string) {
@@ -25,8 +32,7 @@ export function getPostDataInclude(sessionUserId: string) {
       select: getUserDataSelect(sessionUserId),
     },
     votes: {
-      // where: { userId: sessionUserId },
-      select: { userId: true, value: true },
+      select: { userId: true, value: true, createdAt: true },
     },
   } satisfies Prisma.PostInclude;
 }
@@ -35,18 +41,12 @@ export type PostData = Prisma.PostGetPayload<{
   include: ReturnType<typeof getPostDataInclude>;
 }>;
 
-// export type PostsPage = {
-//   posts: PostData[];
-//   nextCursor: string | null;
-// };
-
 export type PostDataWithVotes = PostData & {
   upvotes: number;
   downvotes: number;
   userVote: number | null;
 };
 
-// And update PostsPage accordingly:
 export type PostsPage = {
   posts: PostDataWithVotes[];
   nextCursor: string | null;
@@ -57,6 +57,9 @@ export function getCommentDataInclude(sessionUserId: string) {
     user: {
       select: getUserDataSelect(sessionUserId),
     },
+    votes: {
+      select: { userId: true, value: true },
+    },
   } satisfies Prisma.CommentInclude;
 }
 
@@ -64,18 +67,22 @@ export type CommentData = Prisma.CommentGetPayload<{
   include: ReturnType<typeof getCommentDataInclude>;
 }>;
 
+export type CommentDataWithVotes = CommentData & {
+  upvotes: number;
+  downvotes: number;
+  userVote: number | null;
+};
 export interface CommentsPage {
-  comments: CommentData[];
+  comments: CommentDataWithVotes[];
   nextCursor: string | null;
 }
-
 export interface VoteData {
   upvotes: number;
   downvotes: number;
   userVote: number | null;
 }
-
-export interface FollowData {
-  isFollowedByUser: boolean;
-  followers: number;
+export interface CommentVoteData {
+  upvotes: number;
+  downvotes: number;
+  userVote: number | null;
 }

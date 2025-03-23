@@ -23,10 +23,7 @@ const ReadMore = ({ text, lineClamp }: ReadMoreProps) => {
   return (
     <Linkify>
       <div>
-        <div
-          className={isExpanded ? "" : `line-clamp-[${lineClamp}]`}
-          ref={textRef}
-        >
+        <div className={isExpanded ? "" : `line-clamp-[3]`} ref={textRef}>
           {text}
         </div>
         {showButton && (

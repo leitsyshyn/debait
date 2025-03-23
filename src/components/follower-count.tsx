@@ -12,5 +12,5 @@ export default function FollowerCount({
 }) {
   const { data } = useFollowData(userId, initialData);
 
-  return <span>{data.followers}</span>;
+  return <span>{data.followersCount}</span>;
 }

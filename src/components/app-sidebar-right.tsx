@@ -20,6 +20,7 @@ import { CardTitle, CardDescription } from "./ui/card";
 import UserAvatar from "./user/user-avatar";
 import UserLink from "./user/user-link";
 import FollowButton from "@/features/users/components/follow-button";
+import { Badge } from "./ui/badge";
 
 export function AppSidebarRight() {
   return (
@@ -29,6 +30,29 @@ export function AppSidebarRight() {
           <SidebarGroupLabel>Who to follow</SidebarGroupLabel>
           <SidebarGroupContent className="px-2">
             <WhoToFollow />
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Trending topics</SidebarGroupLabel>
+          <SidebarGroupContent className="flex p-2 flex-row gap-2 flex-wrap">
+            <Badge variant="secondary" className="mb-2">
+              #some topic
+            </Badge>
+            <Badge variant="secondary" className="mb-2">
+              #some topic
+            </Badge>
+            <Badge variant="secondary" className="mb-2">
+              #some topic
+            </Badge>
+            <Badge variant="secondary" className="mb-2">
+              #some topic
+            </Badge>
+            <Badge variant="secondary" className="mb-2">
+              #some topic
+            </Badge>
+            <Badge variant="secondary" className="mb-2">
+              #some topic
+            </Badge>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
@@ -77,7 +101,7 @@ async function WhoToFollow() {
           <FollowButton
             userId={user.id}
             initialState={{
-              followers: user._count.followers,
+              followersCount: user._count.followers,
               isFollowedByUser: user.followers.some(({ followerId }) => {
                 return followerId === session.user.id;
               }),

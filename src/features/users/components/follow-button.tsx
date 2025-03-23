@@ -34,8 +34,8 @@ export default function FollowButton({
       const previousData = queryClient.getQueryData<FollowData>(queryKey);
 
       queryClient.setQueryData<FollowData>(queryKey, () => ({
-        followers:
-          (previousData?.followers || 0) +
+        followersCount:
+          (previousData?.followersCount || 0) +
           (previousData?.isFollowedByUser ? -1 : 1),
         isFollowedByUser: !previousData?.isFollowedByUser,
       }));

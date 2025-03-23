@@ -41,6 +41,8 @@ body {
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    --support: 0 84.2% 60.2%;
+    --oppose: 221.2 83.2% 53.3%;
   }
   .dark {
     --background: 240 10% 3.9%;
@@ -94,8 +96,6 @@ body {
   height: 0;
   pointer-events: none;
 }
-
-
 
 @layer base {
   * {

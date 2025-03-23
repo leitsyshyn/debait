@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import { getCommentDataInclude, CommentsPage } from "@/lib/types";
 import { CommentType } from "@prisma/client";
 
@@ -16,6 +17,8 @@ export async function GET(
       | CommentType
       | undefined;
 
+    const sortBy = req.nextUrl.searchParams.get("sortBy") as "new" | "top";
+
     const pageSize = 5;
 
     const session = await auth();
@@ -29,24 +32,42 @@ export async function GET(
         ...(type && { type }),
       },
       include: getCommentDataInclude(session.user.id),
+      // orderBy:
+      //   sortBy === "new"
+      //     ? { createdAt: "desc" }
+      //     : { votes: { _count: "desc" } },
       orderBy: { createdAt: "desc" },
       take: pageSize + 1,
       cursor: cursor ? { id: cursor } : undefined,
+      // ...(cursor ? { skip: 1 } : {}),
     });
 
     const nextCursor =
       comments.length > pageSize ? comments[pageSize].id : null;
 
+    const commentsWithVoteCounts = comments.map((comment) => {
+      const upvotes = comment.votes.filter((v) => v.value === 1).length;
+      const downvotes = comment.votes.filter((v) => v.value === -1).length;
+      const userVote =
+        comment.votes.find((v) => v.userId === session.user.id)?.value || null;
+
+      return {
+        ...comment,
+        upvotes,
+        downvotes,
+        userVote,
+      };
+    });
+
     const data: CommentsPage = {
-      comments: comments.slice(0, pageSize),
+      comments: commentsWithVoteCounts.slice(0, pageSize),
       nextCursor,
     };
 
     return NextResponse.json(data);
   } catch (error) {
-    console.error(error);
     return NextResponse.json(
-      { error: "Failed to fetch posts" },
+      { error: "Failed to fetch comments" },
       { status: 500 }
     );
   }

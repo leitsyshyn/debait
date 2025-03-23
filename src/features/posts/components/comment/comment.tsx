@@ -1,4 +1,4 @@
-import { CommentData } from "@/lib/types";
+import { CommentData, CommentDataWithVotes } from "@/lib/types";
 import CommentMore from "./comment-more-alert-dialog";
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import { CornerDownRight, HeartHandshake, Swords } from "lucide-react";
@@ -6,9 +6,10 @@ import UserLink from "@/components/user/user-link";
 import UserAvatar from "@/components/user/user-avatar";
 import { formatRelativeDate } from "../../lib/utils";
 import ReadMore from "@/components/read-more";
+import { CommentVoteButton } from "./comment-vote-button";
 
 interface CommentProps {
-  comment: CommentData;
+  comment: CommentDataWithVotes;
 }
 
 const Comment = ({ comment }: CommentProps) => {
@@ -36,6 +37,28 @@ const Comment = ({ comment }: CommentProps) => {
           </CardDescription>
         </div>
         <ReadMore text={comment.content} lineClamp={3} />
+        <div className="flex flex-row gap-2 mt-2">
+          <CommentVoteButton
+            postId={comment.postId}
+            commentId={comment.id}
+            initialData={{
+              upvotes: comment.upvotes,
+              downvotes: comment.downvotes,
+              userVote: comment.userVote,
+            }}
+            value={1}
+          />
+          <CommentVoteButton
+            postId={comment.postId}
+            commentId={comment.id}
+            initialData={{
+              upvotes: comment.upvotes,
+              downvotes: comment.downvotes,
+              userVote: comment.userVote,
+            }}
+            value={-1}
+          />
+        </div>
       </div>
       <CommentMore
         className="opacity-0 group-hover:opacity-100 transition-opacity"

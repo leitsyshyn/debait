@@ -1,15 +1,15 @@
 import { auth } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/prisma";
-import { VoteData } from "@/lib/types";
+import { CommentVoteData } from "@/lib/types";
 
 export async function GET(
   req: NextRequest,
-  props: { params: Promise<{ postId: string }> }
+  props: { params: Promise<{ commentId: string }> }
 ) {
   const params = await props.params;
 
-  const { postId } = params;
+  const { commentId } = params;
 
   try {
     const session = await auth();
@@ -17,8 +17,8 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const post = await db.post.findUnique({
-      where: { id: postId },
+    const comment = await db.comment.findUnique({
+      where: { id: commentId },
       select: {
         votes: {
           where: { userId: session.user.id },
@@ -27,26 +27,26 @@ export async function GET(
       },
     });
 
-    if (!post) {
+    if (!comment) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
     const [upvotes, downvotes] = await Promise.all([
-      db.vote.count({ where: { postId, value: 1 } }),
-      db.vote.count({ where: { postId, value: -1 } }),
+      db.commentVote.count({ where: { commentId, value: 1 } }),
+      db.commentVote.count({ where: { commentId, value: -1 } }),
     ]);
 
-    const data: VoteData = {
+    const data: CommentVoteData = {
       upvotes,
       downvotes,
-      userVote: post.votes.length ? post.votes[0].value : null,
+      userVote: comment.votes.length ? comment.votes[0].value : null,
     };
 
     return NextResponse.json(data);
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Failed to fetch posts" },
+      { error: "Failed to fetch comment votes" },
       { status: 500 }
     );
   }
@@ -54,11 +54,11 @@ export async function GET(
 
 export async function POST(
   req: NextRequest,
-  props: { params: Promise<{ postId: string }> }
+  props: { params: Promise<{ commentId: string }> }
 ) {
   const params = await props.params;
 
-  const { postId } = params;
+  const { commentId } = params;
 
   try {
     const session = await auth();
@@ -75,9 +75,9 @@ export async function POST(
       );
     }
 
-    await db.vote.upsert({
-      where: { postId_userId: { postId, userId: session.user.id } },
-      create: { postId, userId: session.user.id, value },
+    await db.commentVote.upsert({
+      where: { commentId_userId: { commentId, userId: session.user.id } },
+      create: { commentId, userId: session.user.id, value },
       update: { value },
     });
 
@@ -85,7 +85,7 @@ export async function POST(
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Failed to fetch post votes" },
+      { error: "Failed to fetch comment votes" },
       { status: 500 }
     );
   }
@@ -93,11 +93,11 @@ export async function POST(
 
 export async function DELETE(
   req: NextRequest,
-  props: { params: Promise<{ postId: string }> }
+  props: { params: Promise<{ commentId: string }> }
 ) {
   const params = await props.params;
 
-  const { postId } = params;
+  const { commentId } = params;
 
   try {
     const session = await auth();
@@ -105,15 +105,15 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    await db.vote.deleteMany({
-      where: { postId, userId: session.user.id },
+    await db.commentVote.deleteMany({
+      where: { commentId, userId: session.user.id },
     });
 
     return new NextResponse();
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Failed to fetch posts" },
+      { error: "Failed to fetch comment votes" },
       { status: 500 }
     );
   }
