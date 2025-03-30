@@ -7,6 +7,7 @@ export function getUserDataSelect(sessionUserId: string) {
     name: true,
     image: true,
     createdAt: true,
+    plan: true,
     followers: {
       where: { followerId: sessionUserId },
       select: { followerId: true },

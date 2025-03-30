@@ -50,6 +50,11 @@ export function AppSidebar() {
   const session = useSession();
   const user = session.data?.user;
   const queryClient = useQueryClient();
+  console.log(
+    "STRIPE_CUSTOMER_PORTAL_LINK:",
+    process.env.STRIPE_CUSTOMER_PORTAL_LINK
+  );
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -161,7 +166,13 @@ export function AppSidebar() {
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
                     <Sparkles />
-                    Upgrade to Pro
+                    {user?.plan === "FREE" ? (
+                      <Link href="/subscription">Upgrade to Pro</Link>
+                    ) : (
+                      <Link href={process.env.STRIPE_CUSTOMER_PORTAL_LINK!}>
+                        Manage subscription
+                      </Link>
+                    )}
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />

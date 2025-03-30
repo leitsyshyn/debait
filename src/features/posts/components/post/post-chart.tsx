@@ -41,6 +41,7 @@ interface TimeBucket {
 
 interface Vote {
   value: number;
+  updatedAt?: Date;
   createdAt: Date;
 }
 
@@ -107,8 +108,8 @@ export function generateChartData(
 ): ChartData[] {
   return timeBuckets.map(({ start, end, label }) => {
     const { upvotes, downvotes } = votes.reduce(
-      (acc, { value, createdAt }) => {
-        const date = new Date(createdAt);
+      (acc, { value, updatedAt, createdAt }) => {
+        const date = new Date(updatedAt ?? createdAt);
         if (date >= start && date < end) {
           value > 0 ? acc.upvotes++ : value < 0 ? acc.downvotes++ : null;
         }

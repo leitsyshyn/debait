@@ -17,7 +17,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { getUserDataSelect } from "@/lib/types";
 import { formatDate } from "date-fns";
-import { User } from "lucide-react";
+import { BadgeCheck, User } from "lucide-react";
 import { cache, use } from "react";
 
 const getUser = cache(async (username: string, userId: string) => {
@@ -85,7 +85,11 @@ const Page = async ({ params }: { params: Promise<{ username: string }> }) => {
             </div>
             <div className="flex flex-col gap-1 justify-end">
               <div className="space-y-1">
-                <CardTitle>{user?.name}</CardTitle>
+                <div className="flex items-center gap-2">
+                  <CardTitle>{user?.name}</CardTitle>
+                  {user.plan === "PRO" && <BadgeCheck />}
+                </div>
+
                 <CardDescription>@{user?.username}</CardDescription>
               </div>
               <div>

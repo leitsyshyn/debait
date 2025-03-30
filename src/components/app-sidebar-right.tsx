@@ -84,29 +84,39 @@ async function WhoToFollow() {
   return (
     <div className="space-y-2">
       {usersToFollow.map((user) => (
-        <div key={user.id} className="flex flex-row gap-2 items-center ">
-          <UserLink username={user.username ?? ""}>
-            <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-              <UserAvatar image={user?.image ?? undefined} className="size-8" />
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold hover:underline underline-offset-1">
-                  {user?.name}
-                </span>
-                <span className="truncate  hover:underline underline-offset-1 text-xs text-muted-foreground">
-                  @{user?.username}
-                </span>
-              </div>
-            </div>
-          </UserLink>
-          <FollowButton
-            userId={user.id}
-            initialState={{
-              followersCount: user._count.followers,
-              isFollowedByUser: user.followers.some(({ followerId }) => {
-                return followerId === session.user.id;
-              }),
-            }}
-          />
+        <div
+          key={user.id}
+          className="flex flex-row gap-2 items-center justify-between"
+        >
+          {user.username && (
+            <>
+              <UserLink username={user.username ?? ""}>
+                <div className="flex items-center  gap-2 px-1 py-1.5 text-left text-sm">
+                  <UserAvatar
+                    image={user?.image ?? undefined}
+                    className="size-8"
+                  />
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                    <span className="truncate font-semibold hover:underline underline-offset-1">
+                      {user?.name}
+                    </span>
+                    <span className="truncate  hover:underline underline-offset-1 text-xs text-muted-foreground">
+                      @{user?.username}
+                    </span>
+                  </div>
+                </div>
+              </UserLink>
+              <FollowButton
+                userId={user.id}
+                initialState={{
+                  followersCount: user._count.followers,
+                  isFollowedByUser: user.followers.some(({ followerId }) => {
+                    return followerId === session.user.id;
+                  }),
+                }}
+              />
+            </>
+          )}
         </div>
       ))}
     </div>

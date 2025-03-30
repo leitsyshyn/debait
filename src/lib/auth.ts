@@ -9,6 +9,7 @@ declare module "next-auth/jwt" {
   interface JWT {
     role?: UserRole;
     username?: string;
+    plan?: string;
   }
 }
 
@@ -16,11 +17,13 @@ declare module "next-auth" {
   interface User {
     role?: UserRole;
     username?: string;
+    plan?: string;
   }
   interface Session {
     user: {
       role?: UserRole;
       username?: string;
+      plan?: string;
     } & DefaultSession["user"];
   }
 }
@@ -80,6 +83,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       if (token?.username && session.user) {
         session.user.username = token.username;
+      }
+      if (token?.plan && session.user) {
+        session.user.plan = token.plan;
       }
       return session;
     },
