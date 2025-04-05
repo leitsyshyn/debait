@@ -14,7 +14,7 @@ import ReadMore from "@/components/read-more";
 
 import PostDialog from "./post-dialog";
 import { PostButtonDialog } from "./post-button-dialog";
-import { VoteButton } from "./vote-button";
+import { PostVoteButton } from "./post-vote-button";
 import PostHeader from "./post-header";
 // import { EditorContent, useEditor } from "@tiptap/react";
 // import StarterKit from "@tiptap/starter-kit";
@@ -51,7 +51,7 @@ const Post = ({ post }: PostProps) => {
           <PostButtonDialog post={post} container={container}>
             <div className="flex flex-row gap-2">
               <div>
-                <VoteButton
+                <PostVoteButton
                   postId={post.id}
                   initialData={{
                     upvotes: post.upvotes,
@@ -62,7 +62,7 @@ const Post = ({ post }: PostProps) => {
                 />
               </div>
               <div>
-                <VoteButton
+                <PostVoteButton
                   postId={post.id}
                   initialData={{
                     upvotes: post.upvotes,

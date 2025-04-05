@@ -1,5 +1,5 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
+import { AppSidebarLeft } from "@/components/app-sidebar-left";
 import { AppSidebarRight } from "@/components/app-sidebar-right";
 
 export default function MainLayout({
@@ -12,8 +12,8 @@ export default function MainLayout({
       style={{ "--sidebar-width": "16rem" } as React.CSSProperties}
       defaultOpen={true}
     >
-      <AppSidebar />
-      {children}
+      <AppSidebarLeft />
+      <div className="flex flex-1 min-h-svh flex-col relative">{children}</div>
       <AppSidebarRight />
     </SidebarProvider>
   );

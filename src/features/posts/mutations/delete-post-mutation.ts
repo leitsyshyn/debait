@@ -16,12 +16,12 @@ export function useDeletePostMutation() {
     mutationFn: deletePost,
     onSuccess: (deletedPost) => {
       const queryFilter: QueryFilters<InfiniteData<PostsPage, string | null>> =
-        { queryKey: ["post-feed"] };
+        { queryKey: ["posts"] };
 
       queryClient.setQueriesData<InfiniteData<PostsPage, string | null>>(
         queryFilter,
         (oldData) => {
-          if (!oldData) return;
+          if (!oldData || !oldData.pages) return oldData;
           return {
             pageParams: oldData.pageParams,
             pages: oldData.pages.map((page) => ({

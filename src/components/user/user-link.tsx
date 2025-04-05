@@ -1,5 +1,6 @@
-import { cn } from "@/lib/utils";
 import Link from "next/link";
+
+import { cn } from "@/lib/utils";
 
 type UserLinkProps = {
   username: string;
@@ -10,7 +11,7 @@ type UserLinkProps = {
 const UserLink = ({ username, children, className }: UserLinkProps) => {
   return (
     <Link
-      href={`/user/${username}`}
+      href={`/users/${username}`}
       className={cn(
         className,
         "[&>*]:hover:underline [&>*]:underline-offset-4"

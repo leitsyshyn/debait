@@ -26,11 +26,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import CreateCommentForm from "../../comments/components/create-comment-form";
+import CreateCommentForm from "../comments/components/create-comment-form";
 
 import PostHeader from "./post-header";
 import PostComments from "./post-comments";
-import { VoteButton } from "./vote-button";
+import { PostVoteButton } from "./post-vote-button";
 import PostChart from "./post-chart";
 
 interface PostDialogProps {
@@ -118,7 +118,7 @@ const PostDialog = ({ post, children }: PostDialogProps) => {
           </div>
         </div>
         <div className="p-4 border-t flex flex-row gap-2">
-          <VoteButton
+          <PostVoteButton
             postId={post.id}
             initialData={{
               upvotes: post.upvotes,
@@ -127,7 +127,7 @@ const PostDialog = ({ post, children }: PostDialogProps) => {
             }}
             value={1}
           />
-          <VoteButton
+          <PostVoteButton
             postId={post.id}
             initialData={{
               upvotes: post.upvotes,

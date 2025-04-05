@@ -2,9 +2,10 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { FollowData, getUserDataSelect } from "@/lib/types";
 
-export async function GET(props: { params: Promise<{ userId: string }> }) {
-  const params = await props.params;
-
+export async function GET(
+  _request: Request,
+  { params }: { params: { userId: string } }
+) {
   const { userId } = params;
 
   try {
@@ -34,9 +35,10 @@ export async function GET(props: { params: Promise<{ userId: string }> }) {
   }
 }
 
-export async function POST(props: { params: Promise<{ userId: string }> }) {
-  const params = await props.params;
-
+export async function POST(
+  _request: Request,
+  { params }: { params: { userId: string } }
+) {
   const { userId } = params;
 
   try {
@@ -63,9 +65,10 @@ export async function POST(props: { params: Promise<{ userId: string }> }) {
   }
 }
 
-export async function DELETE(props: { params: Promise<{ userId: string }> }) {
-  const params = await props.params;
-
+export async function DELETE(
+  _request: Request,
+  { params }: { params: { userId: string } }
+) {
   const { userId } = params;
 
   try {

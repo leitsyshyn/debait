@@ -4,17 +4,9 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { getPostDataInclude, PostsPage } from "@/lib/types";
 
-export async function GET(
-  req: NextRequest,
-  props: { params: Promise<{ userId: string }> }
-) {
-  const params = await props.params;
-
-  const { userId } = params;
-
+export async function GET(req: NextRequest) {
   try {
     const cursor = req.nextUrl.searchParams.get("cursor") || undefined;
-
     const pageSize = 10;
 
     const session = await auth();
@@ -22,9 +14,24 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const posts = await db.post.findMany({
-      where: { userId },
+    let whereClause = {};
 
+    if (req.nextUrl.searchParams.get("userId")) {
+      whereClause = { userId: req.nextUrl.searchParams.get("userId") };
+    } else if (req.nextUrl.searchParams.get("feed") === "following") {
+      whereClause = {
+        user: {
+          followers: {
+            some: {
+              followerId: session.user.id,
+            },
+          },
+        },
+      };
+    }
+
+    const posts = await db.post.findMany({
+      where: whereClause,
       include: getPostDataInclude(session.user.id),
       orderBy: { createdAt: "desc" },
       take: pageSize + 1,

@@ -10,7 +10,7 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { createPostSchema } from "@/features/posts/lib/schemas";
 import { useSubmitPostMutation } from "@/features/posts/mutations/submit-post-mutation";
-import TextEditor from "@/features/posts/components/post/tiptap-text-editor";
+import TextEditor from "@/features/posts/components/tiptap-text-editor";
 import { cn } from "@/lib/utils";
 
 const CreatePostForm = ({ className }: { className?: string }) => {

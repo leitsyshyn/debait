@@ -1,6 +1,7 @@
 "use client";
 
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
+import { Prisma } from "@prisma/client";
 
 import {
   ChartConfig,
@@ -8,7 +9,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Prisma } from "@prisma/client";
 import { getUserDataSelect } from "@/lib/types";
 
 const chartConfig = {
@@ -18,7 +18,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function TestChart({
+export function UserChart({
   user,
   supportCount,
   opposeCount,

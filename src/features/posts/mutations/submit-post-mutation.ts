@@ -16,7 +16,7 @@ export function useSubmitPostMutation() {
     mutationFn: submitPost,
     onSuccess: async (newPost) => {
       const queryFilter: QueryFilters<InfiniteData<PostsPage, string | null>> =
-        { queryKey: ["post-feed", "for-you"] };
+        { queryKey: ["posts", "for-you"] };
 
       await queryClient.cancelQueries(queryFilter);
 

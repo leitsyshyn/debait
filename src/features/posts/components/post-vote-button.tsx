@@ -1,23 +1,21 @@
 import { QueryKey } from "@tanstack/react-query";
 
-import { CommentVoteData } from "@/lib/types";
+import { VoteData } from "@/lib/types";
 import { VoteButton } from "@/components/vote-button";
 
 interface VoteButtonsProps {
   postId: string;
-  commentId: string;
-  initialData: CommentVoteData;
+  initialData: VoteData;
   value: number;
 }
 
-export const CommentVoteButton = ({
+export const PostVoteButton = ({
   postId,
-  commentId,
   initialData,
   value,
 }: VoteButtonsProps) => {
-  const queryKey: QueryKey = ["commentVotes", postId, commentId];
-  const voteUrl = `/api/posts/${postId}/comments/${commentId}/votes`;
+  const queryKey: QueryKey = ["posts", "votes", postId];
+  const voteUrl = `/api/posts/${postId}/votes`;
 
   return (
     <VoteButton
@@ -25,6 +23,6 @@ export const CommentVoteButton = ({
       initialData={initialData}
       queryKey={queryKey}
       voteUrl={voteUrl}
-    />
+    ></VoteButton>
   );
 };

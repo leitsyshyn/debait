@@ -41,7 +41,7 @@ import {
 } from "./ui/dropdown-menu";
 import { ModeToggle } from "./theme-provider";
 
-export function AppSidebar() {
+export function AppSidebarLeft() {
   const { isMobile } = useSidebar();
   const session = useSession();
   const user = session.data?.user;

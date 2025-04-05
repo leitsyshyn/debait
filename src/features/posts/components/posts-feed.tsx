@@ -1,15 +1,19 @@
 "use client";
 
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { QueryKey, useInfiniteQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 
 import kyInstance from "@/lib/ky";
 import { PostsPage } from "@/lib/types";
 import InfiniteScrollContainer from "@/components/infinite-scroll-container";
 
-import Post from "../post/post";
+import Post from "./post";
 
-export default function FollowingFeed() {
+interface PostsFeedProps {
+  queryKey: QueryKey;
+  postsUrl: string;
+}
+export default function PostsFeed({ queryKey, postsUrl }: PostsFeedProps) {
   const {
     data,
     fetchNextPage,
@@ -18,13 +22,10 @@ export default function FollowingFeed() {
     isFetchingNextPage,
     status,
   } = useInfiniteQuery({
-    queryKey: ["post-feed", "following"],
+    queryKey,
     queryFn: ({ pageParam }) =>
       kyInstance
-        .get(
-          "/api/posts/following-feed",
-          pageParam ? { searchParams: { cursor: pageParam } } : {}
-        )
+        .get(postsUrl, pageParam ? { searchParams: { cursor: pageParam } } : {})
         .json<PostsPage>(),
     initialPageParam: null as string | null,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -39,8 +40,6 @@ export default function FollowingFeed() {
       </div>
     );
   if (status === "error") return <div>Error</div>;
-
-  console.log(status);
 
   return (
     <InfiniteScrollContainer
