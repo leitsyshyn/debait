@@ -1,13 +1,13 @@
 import { toast } from "sonner";
-import { CommentsPage, PostsPage } from "@/lib/types";
 import {
   InfiniteData,
-  QueryFilters,
   QueryKey,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import { deleteComment } from "@/features/posts/actions/delete-comment";
+
+import { CommentsPage } from "@/lib/types";
+import { deleteComment } from "@/features/posts/comments/actions/delete-comment";
 
 export function useDeleteCommentMutation() {
   const queryClient = useQueryClient();
@@ -26,7 +26,7 @@ export function useDeleteCommentMutation() {
           return {
             pageParams: oldData.pageParams,
             pages: oldData.pages.map((page) => ({
-              previousCursor: page.previousCursor,
+              nextCursor: page.nextCursor,
               comments: page.comments.filter(
                 (comment) => comment.id !== deletedComment.id
               ),

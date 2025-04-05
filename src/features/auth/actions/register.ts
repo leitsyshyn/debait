@@ -1,6 +1,7 @@
 "use server";
 
 import bcrypt from "bcryptjs";
+
 import { db } from "@/lib/prisma";
 import { FormStatus } from "@/features/auth/lib/types";
 import { registerSchema } from "@/features/auth/lib/schemas";

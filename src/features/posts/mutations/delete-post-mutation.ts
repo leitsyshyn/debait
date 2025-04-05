@@ -1,11 +1,12 @@
 import { toast } from "sonner";
-import { PostsPage } from "@/lib/types";
 import {
   InfiniteData,
   QueryFilters,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
+
+import { PostsPage } from "@/lib/types";
 import { deletePost } from "@/features/posts/actions/delete-post";
 
 export function useDeletePostMutation() {

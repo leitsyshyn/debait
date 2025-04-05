@@ -1,15 +1,11 @@
 "use client";
 
+import { QueryKey, useMutation, useQueryClient } from "@tanstack/react-query";
+
 import { Button } from "@/components/ui/button";
 import useFollowData from "@/hooks/use-follow-data";
 import kyInstance from "@/lib/ky";
 import { FollowData } from "@/lib/types";
-import {
-  Query,
-  QueryKey,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
 
 export default function FollowButton({
   userId,
@@ -42,9 +38,8 @@ export default function FollowButton({
 
       return { previousData };
     },
-    onError: (err, variables, context) => {
+    onError: (context: { previousData?: FollowData }) => {
       queryClient.setQueryData<FollowData>(queryKey, context?.previousData);
-      console.error(err);
     },
   });
 

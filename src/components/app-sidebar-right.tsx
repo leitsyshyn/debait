@@ -1,25 +1,17 @@
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
 } from "@/components/ui/sidebar";
 import { auth } from "@/lib/auth";
-import { useQueryClient } from "@tanstack/react-query";
-import TrendsSidebar from "./recomendations-sidebar";
 import { db } from "@/lib/prisma";
 import { getUserDataSelect } from "@/lib/types";
-import { CardTitle, CardDescription } from "./ui/card";
+import FollowButton from "@/components/follow-button";
+
 import UserAvatar from "./user/user-avatar";
 import UserLink from "./user/user-link";
-import FollowButton from "@/features/users/components/follow-button";
 import { Badge } from "./ui/badge";
 
 export function AppSidebarRight() {

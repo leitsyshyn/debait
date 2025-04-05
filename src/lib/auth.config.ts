@@ -2,10 +2,11 @@ import bcrypt from "bcryptjs";
 import type { NextAuthConfig } from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Credentials from "next-auth/providers/credentials";
+
 import { db } from "@/lib/prisma";
+// eslint-disable-next-line boundaries/element-types
 import { loginSchema } from "@/features/auth/lib/schemas";
 
-// Notice this is only an object, not a full Auth.js instance
 export default {
   providers: [
     GitHub({
@@ -56,6 +57,7 @@ export default {
           return {
             ...userWithoutPassword,
             username: user.username ?? undefined,
+            plan: user.plan ?? undefined,
           };
         } catch (error) {
           console.error("Error authorizing credentials:", error);

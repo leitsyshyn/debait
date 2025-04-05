@@ -1,6 +1,7 @@
+import { useQuery } from "@tanstack/react-query";
+
 import ky from "@/lib/ky";
 import { FollowData } from "@/lib/types";
-import { useQuery } from "@tanstack/react-query";
 
 export default function useFollowData(
   userId: string,

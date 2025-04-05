@@ -1,14 +1,9 @@
-import { auth } from "@/lib/auth";
-import { db } from "@/lib/prisma";
-import { getUserDataSelect } from "@/lib/types";
 import { Loader2 } from "lucide-react";
 import { unstable_cache } from "next/cache";
 import Link from "next/link";
 import { Suspense } from "react";
-import UserAvatar from "./user/user-avatar";
-import { Button } from "./ui/button";
-import { CardTitle, CardDescription } from "./ui/card";
-import UserLink from "./user/user-link";
+
+import { db } from "@/lib/prisma";
 
 export default function TrendsSidebar() {
   return (

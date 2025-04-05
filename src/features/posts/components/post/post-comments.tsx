@@ -1,13 +1,13 @@
 "use client";
 
-import kyInstance from "@/lib/ky";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { CommentDataWithVotes, CommentsPage, PostData } from "@/lib/types";
-import InfiniteScrollContainer from "@/components/infinite-scroll-container";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import Comment from "../comment/comment";
 import { CommentType } from "@prisma/client";
+
+import kyInstance from "@/lib/ky";
+import { CommentsPage, PostData } from "@/lib/types";
+import InfiniteScrollContainer from "@/components/infinite-scroll-container";
+import Comment from "@/features/posts/comments/components/comment";
 
 interface PostCommentsProps {
   post: PostData;
@@ -20,7 +20,6 @@ export default function PostComments({
   type,
   sortBy,
 }: PostCommentsProps) {
-  const router = useRouter();
   const {
     data,
     fetchNextPage,

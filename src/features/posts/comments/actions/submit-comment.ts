@@ -3,8 +3,7 @@
 import { db } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { getCommentDataInclude, PostDataWithVotes } from "@/lib/types";
-import { createCommentSchema } from "@/features/posts/lib/schemas";
-import { PostData } from "@/lib/types";
+import { createCommentSchema } from "@/features/posts/comments/lib/schemas";
 
 export const submitComment = async ({
   post,
@@ -35,7 +34,10 @@ export const submitComment = async ({
     include: getCommentDataInclude(session.user.id),
   });
 
-  console.log("newComment", newComment);
-
-  return newComment;
+  return {
+    ...newComment,
+    upvotes: 0,
+    downvotes: 0,
+    userVote: null,
+  };
 };

@@ -4,25 +4,13 @@ import { useRef } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
+import { Loader2, Send } from "lucide-react";
+
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { createPostSchema } from "@/features/posts/lib/schemas";
 import { useSubmitPostMutation } from "@/features/posts/mutations/submit-post-mutation";
 import TextEditor from "@/features/posts/components/post/tiptap-text-editor";
-import { Loader2, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const CreatePostForm = ({ className }: { className?: string }) => {

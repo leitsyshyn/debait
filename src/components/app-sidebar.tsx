@@ -1,35 +1,35 @@
 "use client";
 
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "@/components/ui/sidebar";
-import {
-  BadgeCheck,
   Bell,
   ChevronsUpDown,
-  Command,
-  CreditCard,
-  GalleryVerticalEnd,
   Home,
   LogOut,
   Pin,
-  Save,
   Scale,
   Search,
   Sparkles,
   User,
   UserPlus,
 } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
+import { useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
+
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "@/components/ui/sidebar";
+
+import UserAvatar from "./user/user-avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,10 +39,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { signOut, useSession } from "next-auth/react";
-import UserAvatar from "./user/user-avatar";
-import { useQueryClient } from "@tanstack/react-query";
-import Link from "next/link";
 import { ModeToggle } from "./theme-provider";
 
 export function AppSidebar() {
@@ -52,7 +48,9 @@ export function AppSidebar() {
   const queryClient = useQueryClient();
   console.log(
     "STRIPE_CUSTOMER_PORTAL_LINK:",
-    process.env.STRIPE_CUSTOMER_PORTAL_LINK
+    process.env.STRIPE_CUSTOMER_PORTAL_LINK,
+    "PLAN:",
+    user?.plan
   );
 
   return (
@@ -169,7 +167,11 @@ export function AppSidebar() {
                     {user?.plan === "FREE" ? (
                       <Link href="/subscription">Upgrade to Pro</Link>
                     ) : (
-                      <Link href={process.env.STRIPE_CUSTOMER_PORTAL_LINK!}>
+                      <Link
+                        href={
+                          process.env.NEXT_PUBLIC_STRIPE_CUSTOMER_PORTAL_LINK!
+                        }
+                      >
                         Manage subscription
                       </Link>
                     )}

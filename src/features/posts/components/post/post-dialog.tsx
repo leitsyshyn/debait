@@ -1,3 +1,13 @@
+import {
+  ChartArea,
+  CloudLightning,
+  HeartHandshake,
+  MessagesSquare,
+  Swords,
+} from "lucide-react";
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -6,21 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { PostDataWithVotes } from "@/lib/types";
-import PostHeader from "./post-header";
-import CreateCommentForm from "../comment/create-comment-form";
-import PostComments from "./post-comments";
-import {
-  ChartArea,
-  ChartBar,
-  Cloud,
-  CloudLightning,
-  HeartHandshake,
-  MessagesSquare,
-  Swords,
-} from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { VoteButton } from "./vote-button";
 import ReadMore from "@/components/read-more";
 import {
   Select,
@@ -29,8 +25,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+
+import CreateCommentForm from "../../comments/components/create-comment-form";
+
+import PostHeader from "./post-header";
+import PostComments from "./post-comments";
+import { VoteButton } from "./vote-button";
 import PostChart from "./post-chart";
 
 interface PostDialogProps {
@@ -51,7 +51,7 @@ const PostDialog = ({ post, children }: PostDialogProps) => {
         <PostHeader post={post} />
         <div className="max-h-96 overflow-auto relative mt-4">
           <div className="p-4 pt-0">
-            <ReadMore lineClamp={3} text={post.content} />
+            <ReadMore>{post.content}</ReadMore>
           </div>
           <div>
             <Tabs defaultValue="all">

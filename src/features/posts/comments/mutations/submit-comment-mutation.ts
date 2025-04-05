@@ -1,12 +1,13 @@
 import { toast } from "sonner";
-import { CommentsPage } from "@/lib/types";
 import {
   InfiniteData,
   QueryKey,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import { submitComment } from "@/features/posts/actions/submit-comment";
+
+import { CommentsPage } from "@/lib/types";
+import { submitComment } from "@/features/posts/comments/actions/submit-comment";
 
 export function useSubmitCommentMutation(postId: string) {
   const queryClient = useQueryClient();

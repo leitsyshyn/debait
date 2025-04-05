@@ -1,29 +1,16 @@
 "use client";
 
-import { useRef } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
+import { Loader2, Send } from "lucide-react";
+
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { createCommentSchema } from "@/features/posts/lib/schemas";
-import { useSubmitCommentMutation } from "@/features/posts/mutations/submit-comment-mutation";
-import { PostData, PostDataWithVotes } from "@/lib/types";
+import { createCommentSchema } from "@/features/posts/comments/lib/schemas";
+import { useSubmitCommentMutation } from "@/features/posts/comments/mutations/submit-comment-mutation";
+import { PostDataWithVotes } from "@/lib/types";
 import { Input } from "@/components/ui/input";
-import { Loader, Loader2, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const CreateCommentForm = ({

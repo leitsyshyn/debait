@@ -1,7 +1,3 @@
-import { Button } from "@/components/ui/button";
-import kyInstance from "@/lib/ky";
-import { CommentVoteData, VoteData } from "@/lib/types";
-
 import {
   QueryKey,
   useMutation,
@@ -9,6 +5,10 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { HeartHandshake, Swords } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import kyInstance from "@/lib/ky";
+import { CommentVoteData, VoteData } from "@/lib/types";
 import { Tooltip } from "@/components/ui/tooltip";
 import {
   TooltipContent,
@@ -91,7 +91,7 @@ export const CommentVoteButton = ({
 
       return { previousData };
     },
-    onError: (error, voteValue, context: any) => {
+    onError: (context: { previousData?: CommentVoteData }) => {
       if (context?.previousData) {
         queryClient.setQueryData(queryKey, context.previousData);
       }

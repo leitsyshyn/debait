@@ -1,18 +1,8 @@
-import {
-  CloudLightning,
-  GalleryVerticalEnd,
-  HeartHandshake,
-  MessagesSquare,
-  Radio,
-  Swords,
-  Users,
-} from "lucide-react";
+import { Radio, Users } from "lucide-react";
+
 import ForYouFeed from "@/features/posts/components/feed/for-you-feed";
-import LogoutButton from "@/features/auth/components/logout-button";
 import CreatePostForm from "@/features/posts/components/post/create-post-form";
 import { Button } from "@/components/ui/button";
-import post from "@/features/posts/components/post/post";
-import PostComments from "@/features/posts/components/post/post-comments";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import FollowingFeed from "@/features/posts/components/feed/following-feed";
 const Page = async () => {

@@ -1,11 +1,13 @@
-import { CommentData, CommentDataWithVotes } from "@/lib/types";
-import CommentMore from "./comment-more-alert-dialog";
+import { HeartHandshake, Swords } from "lucide-react";
+
 import { CardDescription, CardTitle } from "@/components/ui/card";
-import { CornerDownRight, HeartHandshake, Swords } from "lucide-react";
+import { CommentDataWithVotes } from "@/lib/types";
 import UserLink from "@/components/user/user-link";
 import UserAvatar from "@/components/user/user-avatar";
-import { formatRelativeDate } from "../../lib/utils";
 import ReadMore from "@/components/read-more";
+import { formatRelativeDate } from "@/lib/utils";
+
+import CommentMore from "./comment-more-alert-dialog";
 import { CommentVoteButton } from "./comment-vote-button";
 
 interface CommentProps {
@@ -36,7 +38,7 @@ const Comment = ({ comment }: CommentProps) => {
             {formatRelativeDate(comment.createdAt)}
           </CardDescription>
         </div>
-        <ReadMore text={comment.content} lineClamp={3} />
+        <ReadMore>{comment.content}</ReadMore>
         <div className="flex flex-row gap-2 mt-2">
           <CommentVoteButton
             postId={comment.postId}

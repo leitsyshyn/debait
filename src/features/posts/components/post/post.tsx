@@ -1,23 +1,9 @@
-import * as DialogPrimitive from "@radix-ui/react-dialog";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardTitle,
-} from "@/components/ui/card";
-import UserLink from "@/components/user/user-link";
-import UserAvatar from "@/components/user/user-avatar";
-import { Button } from "@/components/ui/button";
-import PostMore from "./post-more-alert-dialog";
-import { PostDataWithVotes } from "@/lib/types";
-import { formatRelativeDate } from "@/features/posts/lib/utils";
-import { Badge } from "@/components/ui/badge";
-import { MessagesSquare, Swords } from "lucide-react";
+import { MessagesSquare } from "lucide-react";
 import { useState } from "react";
-import PostDialog from "./post-dialog";
-import { PostButtonDialog } from "./post-button-dialog";
-import { VoteButton } from "./vote-button";
+
+import { CardContent, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { PostDataWithVotes } from "@/lib/types";
 import {
   Tooltip,
   TooltipContent,
@@ -25,6 +11,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import ReadMore from "@/components/read-more";
+
+import PostDialog from "./post-dialog";
+import { PostButtonDialog } from "./post-button-dialog";
+import { VoteButton } from "./vote-button";
 import PostHeader from "./post-header";
 // import { EditorContent, useEditor } from "@tiptap/react";
 // import StarterKit from "@tiptap/starter-kit";
@@ -53,7 +43,7 @@ const Post = ({ post }: PostProps) => {
       <div className="flex flex-col gap-2">
         <PostHeader post={post} />
         <CardContent className="px-4 pb-0">
-          <ReadMore text={post.content} lineClamp={3} />
+          <ReadMore>{post.content}</ReadMore>
           {/* <EditorContent editor={editor} /> */}
           {/* {post.content} */}
         </CardContent>

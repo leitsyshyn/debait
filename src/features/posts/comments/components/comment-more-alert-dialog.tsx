@@ -1,3 +1,7 @@
+import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
+import { Flag, MoreHorizontal, Trash } from "lucide-react";
+import { useSession } from "next-auth/react";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,15 +14,12 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
-import { Flag, Info, MoreHorizontal, Trash } from "lucide-react";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useDeleteCommentMutation } from "@/features/posts/mutations/delete-comment-mutation";
-import { useSession } from "next-auth/react";
+import { useDeleteCommentMutation } from "@/features/posts/comments/mutations/delete-comment-mutation";
 
 const CommentMore = ({
   commentId,

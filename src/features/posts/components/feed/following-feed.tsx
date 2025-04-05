@@ -1,15 +1,15 @@
 "use client";
 
-import Post from "../post/post";
-import kyInstance from "@/lib/ky";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { Loader2 } from "lucide-react";
+
+import kyInstance from "@/lib/ky";
 import { PostsPage } from "@/lib/types";
 import InfiniteScrollContainer from "@/components/infinite-scroll-container";
-import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+
+import Post from "../post/post";
 
 export default function FollowingFeed() {
-  const router = useRouter();
   const {
     data,
     fetchNextPage,

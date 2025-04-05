@@ -1,12 +1,10 @@
-import { auth } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
+
+import { auth } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { CommentVoteData } from "@/lib/types";
 
-export async function GET(
-  req: NextRequest,
-  props: { params: Promise<{ commentId: string }> }
-) {
+export async function GET(props: { params: Promise<{ commentId: string }> }) {
   const params = await props.params;
 
   const { commentId } = params;
@@ -91,10 +89,9 @@ export async function POST(
   }
 }
 
-export async function DELETE(
-  req: NextRequest,
-  props: { params: Promise<{ commentId: string }> }
-) {
+export async function DELETE(props: {
+  params: Promise<{ commentId: string }>;
+}) {
   const params = await props.params;
 
   const { commentId } = params;

@@ -2,14 +2,14 @@
 
 import * as React from "react";
 import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes";
+import { Moon, Sun, SunMoon } from "lucide-react";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { Button } from "./ui/button";
-import { Moon, Sun, SunMoon } from "lucide-react";
 
 export function ThemeProvider({
   children,
@@ -19,14 +19,20 @@ export function ThemeProvider({
 }
 
 export function ModeToggle() {
-  const { setTheme, theme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <DropdownMenuItem>
-          {theme == "dark" ? <Moon /> : <Sun />}
-          Toggle theme
+          {resolvedTheme == "dark" ? (
+            <Moon />
+          ) : resolvedTheme == "light" ? (
+            <Sun />
+          ) : (
+            <SunMoon />
+          )}
+          Change theme
         </DropdownMenuItem>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

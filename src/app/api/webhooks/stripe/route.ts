@@ -1,6 +1,7 @@
+import Stripe from "stripe";
+
 import { db } from "@/lib/prisma";
 import { stripe } from "@/lib/stripe";
-import Stripe from "stripe";
 
 const WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET!;
 
@@ -12,12 +13,12 @@ export async function POST(req: Request) {
 
   try {
     event = stripe.webhooks.constructEvent(body, sig, WEBHOOK_SECRET);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     console.error("Webhook signature verification failed.", err.message);
     return new Response(`Webhook Error: ${err.message}`, { status: 400 });
   }
 
-  // Handle the event
   try {
     switch (event.type) {
       case "checkout.session.completed":
@@ -50,7 +51,7 @@ export async function POST(req: Request) {
             const isSubscription = item.price?.type === "recurring";
 
             if (isSubscription) {
-              let endDate = new Date();
+              const endDate = new Date();
               if (priceId === process.env.STRIPE_YEARLY_PRICE_ID!) {
                 endDate.setFullYear(endDate.getFullYear() + 1); // 1 year from now
               } else if (priceId === process.env.STRIPE_MONTHLY_PRICE_ID!) {
@@ -58,7 +59,6 @@ export async function POST(req: Request) {
               } else {
                 throw new Error("Invalid priceId");
               }
-              // it is gonna create the subscription if it does not exist already, but if it exists it will update it
               await db.subscription.upsert({
                 where: { userId: user.id! },
                 create: {
@@ -87,7 +87,6 @@ export async function POST(req: Request) {
                 data: { plan: "PRO" },
               });
             } else {
-              // one_time_purchase
             }
           }
         }

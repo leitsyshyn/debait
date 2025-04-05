@@ -1,10 +1,10 @@
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import UserLink from "@/components/user/user-link";
 import UserAvatar from "@/components/user/user-avatar";
-import PostMore from "./post-more-alert-dialog";
 import { PostData } from "@/lib/types";
-import { formatRelativeDate } from "@/features/posts/lib/utils";
-import { Badge } from "@/components/ui/badge";
+import { formatRelativeDate } from "@/lib/utils";
+
+import PostMore from "./post-more-alert-dialog";
 
 const PostHeader = ({ post }: { post: PostData }) => {
   return (

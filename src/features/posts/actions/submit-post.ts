@@ -21,5 +21,5 @@ export const submitPost = async (input: string) => {
     include: getPostDataInclude(session.user.id),
   });
 
-  return newPost;
+  return { ...newPost, upvotes: 0, downvotes: 0, userVote: null };
 };

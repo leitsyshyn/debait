@@ -1,24 +1,17 @@
+import { formatDate } from "date-fns";
+import { BadgeCheck } from "lucide-react";
+import { cache } from "react";
+
 import { TestChart } from "@/components/charts/test-chart";
 import FollowerCount from "@/components/follower-count";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import UserAvatar from "@/components/user/user-avatar";
 import UserFeed from "@/features/posts/components/feed/user-feed";
-import FollowButton from "@/features/users/components/follow-button";
-import useFollowData from "@/hooks/use-follow-data";
+import FollowButton from "@/components/follow-button";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { getUserDataSelect } from "@/lib/types";
-import { formatDate } from "date-fns";
-import { BadgeCheck, User } from "lucide-react";
-import { cache, use } from "react";
 
 const getUser = cache(async (username: string, userId: string) => {
   const user = await db.user.findFirst({

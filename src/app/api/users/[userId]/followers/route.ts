@@ -1,14 +1,11 @@
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { FollowData, getUserDataSelect } from "@/lib/types";
-import { Follow } from "@prisma/client";
 
-export async function GET(req: Request, props: { params: Promise<{ userId: string }> }) {
+export async function GET(props: { params: Promise<{ userId: string }> }) {
   const params = await props.params;
 
-  const {
-    userId
-  } = params;
+  const { userId } = params;
 
   try {
     const session = await auth();
@@ -37,12 +34,10 @@ export async function GET(req: Request, props: { params: Promise<{ userId: strin
   }
 }
 
-export async function POST(req: Request, props: { params: Promise<{ userId: string }> }) {
+export async function POST(props: { params: Promise<{ userId: string }> }) {
   const params = await props.params;
 
-  const {
-    userId
-  } = params;
+  const { userId } = params;
 
   try {
     const session = await auth();
@@ -68,12 +63,10 @@ export async function POST(req: Request, props: { params: Promise<{ userId: stri
   }
 }
 
-export async function DELETE(req: Request, props: { params: Promise<{ userId: string }> }) {
+export async function DELETE(props: { params: Promise<{ userId: string }> }) {
   const params = await props.params;
 
-  const {
-    userId
-  } = params;
+  const { userId } = params;
 
   try {
     const session = await auth();

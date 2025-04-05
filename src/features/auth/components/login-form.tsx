@@ -6,6 +6,15 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, Loader2 } from "lucide-react";
+import {
+  useRef,
+  startTransition,
+  useActionState,
+  useState,
+  useEffect,
+} from "react";
+import { REGEXP_ONLY_DIGITS } from "input-otp";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -25,13 +34,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  useRef,
-  startTransition,
-  useActionState,
-  useState,
-  useEffect,
-} from "react";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import {
   InputOTP,
@@ -39,7 +41,6 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { loginSchema } from "@/features/auth/lib/schemas";
 import { login } from "@/features/auth/actions/login";
 

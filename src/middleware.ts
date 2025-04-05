@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import NextAuth, { Session } from "next-auth";
+
 import {
   publicRoutes,
   authRoutes,
   apiAuthPrefix,
   DEFAULT_LOGIN_REDIRECT,
+  // eslint-disable-next-line boundaries/element-types
 } from "@/routes";
 import authConfig from "@/lib/auth.config";
 

@@ -1,13 +1,10 @@
-import SubscriptionCard, {
-  SubscriptionCardProps,
-} from "@/features/subscriptions/components/subscripton-card";
 import { GalleryVerticalEnd } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
-interface SubscriptionPageProps {
-  subscriptions: SubscriptionCardProps[];
-}
+import SubscriptionCard, {
+  SubscriptionCardProps,
+} from "@/features/subscriptions/components/subscripton-card";
 
 const subscriptions: SubscriptionCardProps[] = [
   {

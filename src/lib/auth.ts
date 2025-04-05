@@ -1,29 +1,31 @@
 import NextAuth, { type DefaultSession } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { db } from "@/lib/prisma";
 import { v4 as _uuid } from "uuid";
+import { Plan, UserRole } from "@prisma/client";
+
+import { db } from "@/lib/prisma";
 import {} from "next-auth/jwt";
 import authConfig from "@/lib/auth.config";
-import { UserRole } from "@prisma/client";
+
 declare module "next-auth/jwt" {
   interface JWT {
-    role?: UserRole;
     username?: string;
-    plan?: string;
+    role?: UserRole;
+    plan?: Plan;
   }
 }
 
 declare module "next-auth" {
   interface User {
-    role?: UserRole;
     username?: string;
-    plan?: string;
+    role?: UserRole;
+    plan?: Plan;
   }
   interface Session {
     user: {
       role?: UserRole;
       username?: string;
-      plan?: string;
+      plan?: Plan;
     } & DefaultSession["user"];
   }
 }
@@ -61,15 +63,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return true;
     },
     async jwt({ token, user }) {
-      // if (!token?.sub) return token;
-      // const existingUser = await prisma.user.findUnique({
-      //   where: { id: token.sub },
-      // });
-      // token.role = existingUser?.role;
       if (user) {
         token.role = user.role;
         token.id = user.id;
         token.username = user.username;
+        token.plan = user.plan;
       }
 
       return token;

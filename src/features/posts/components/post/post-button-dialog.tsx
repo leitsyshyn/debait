@@ -1,8 +1,9 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 
-import { PostData, PostDataWithVotes } from "@/lib/types";
+import { PostDataWithVotes } from "@/lib/types";
+import CreateCommentForm from "@/features/posts/comments/components/create-comment-form";
+
 import PostDialog from "./post-dialog";
-import CreateCommentForm from "../comment/create-comment-form";
 
 export function PostButtonDialog({
   children,

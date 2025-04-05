@@ -1,14 +1,16 @@
+import { NextRequest, NextResponse } from "next/server";
+
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { getPostDataInclude, PostsPage } from "@/lib/types";
-import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest, props: { params: Promise<{ userId: string }> }) {
+export async function GET(
+  req: NextRequest,
+  props: { params: Promise<{ userId: string }> }
+) {
   const params = await props.params;
 
-  const {
-    userId
-  } = params;
+  const { userId } = params;
 
   try {
     const cursor = req.nextUrl.searchParams.get("cursor") || undefined;

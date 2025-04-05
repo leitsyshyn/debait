@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LinkIt, LinkItUrl } from "react-linkify-it";
+
 import { Badge } from "./ui/badge";
 
 interface LinkifyProps {

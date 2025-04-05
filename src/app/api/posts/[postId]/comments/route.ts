@@ -1,9 +1,9 @@
 import { NextResponse, NextRequest } from "next/server";
+import { CommentType } from "@prisma/client";
+
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
 import { getCommentDataInclude, CommentsPage } from "@/lib/types";
-import { CommentType } from "@prisma/client";
 
 export async function GET(
   req: NextRequest,
@@ -16,8 +16,6 @@ export async function GET(
     const type = req.nextUrl.searchParams.get("type") as
       | CommentType
       | undefined;
-
-    const sortBy = req.nextUrl.searchParams.get("sortBy") as "new" | "top";
 
     const pageSize = 5;
 
@@ -65,7 +63,7 @@ export async function GET(
     };
 
     return NextResponse.json(data);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to fetch comments" },
       { status: 500 }

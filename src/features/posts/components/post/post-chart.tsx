@@ -2,6 +2,16 @@
 
 import * as React from "react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import {
+  format,
+  addYears,
+  addDays,
+  addHours,
+  addMinutes,
+  addMonths,
+  addWeeks,
+} from "date-fns";
+import { useMemo, useState } from "react";
 
 import {
   ChartConfig,
@@ -18,20 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-import { PostDataWithVotes } from "@/lib/types";
-
-import {
-  format,
-  addYears,
-  addDays,
-  addHours,
-  addMinutes,
-  addMonths,
-  addWeeks,
-} from "date-fns";
-import { useMemo, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 interface TimeBucket {
   start: Date;
@@ -111,7 +108,11 @@ export function generateChartData(
       (acc, { value, updatedAt, createdAt }) => {
         const date = new Date(updatedAt ?? createdAt);
         if (date >= start && date < end) {
-          value > 0 ? acc.upvotes++ : value < 0 ? acc.downvotes++ : null;
+          if (value > 0) {
+            acc.upvotes++;
+          } else if (value < 0) {
+            acc.downvotes++;
+          }
         }
         return acc;
       },
@@ -156,7 +157,10 @@ export default function PostCharts({ votes }: { votes: Vote[] }) {
         title="Post Votes"
         className="flex flex-row gap-4 pt-4 items-center justify-between"
       >
-        <Select value={range} onValueChange={(v) => setRange(v as any)}>
+        <Select
+          value={range}
+          onValueChange={(v: string) => setRange(v as TimeRange)}
+        >
           <SelectTrigger className="min-w-36 max-w-fit space-x-2">
             <span>Votes over: </span>
             <SelectValue placeholder="Last day" />
