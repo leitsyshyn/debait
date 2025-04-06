@@ -1,27 +1,32 @@
+import { User } from "next-auth";
+
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import UserLink from "./user-link";
-import UserAvatar from "./user-avatar";
+
+import FollowButton from "../follow-button";
+
+import UserPersona from "./user-persona";
 
 type UserHoverCardProps = {
-  image?: string;
-  username: string;
+  user: User;
   children: React.ReactNode;
-  className?: string;
 };
 
-const UserHoverCard = ({ image, username, children }: UserHoverCardProps) => {
+const UserHoverCard = ({ children, user }: UserHoverCardProps) => {
   return (
     <HoverCard>
       <HoverCardTrigger asChild>{children}</HoverCardTrigger>
-      <HoverCardContent className="w-min">
-        <div className="flex  gap-2">
-          <UserAvatar image={image} username={username} />
-          <UserLink username={username} />
-        </div>
+      <HoverCardContent>
+        <UserPersona user={user} />
+        {user.id && (
+          <FollowButton
+            userId={user.id}
+            initialState={{ followersCount: 0, isFollowedByUser: false }}
+          />
+        )}
       </HoverCardContent>
     </HoverCard>
   );

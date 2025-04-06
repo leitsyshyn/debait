@@ -1,11 +1,12 @@
 import Stripe from "stripe";
+import { NextRequest } from "next/server";
 
 import { db } from "@/lib/prisma";
 import { stripe } from "@/lib/stripe";
 
 const WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET!;
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   const body = await req.text();
 
   const sig = req.headers.get("stripe-signature")!;

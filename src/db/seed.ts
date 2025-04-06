@@ -27,25 +27,18 @@ function getRandomVoteValue() {
 
 async function main() {
   // 1) Clear existing seed data in correct order
-  //    If you have relationships or foreign key constraints,
-  //    always delete from the 'child' side to the 'parent' side.
-  //    For example, if a Post has many Votes, delete Votes first, then Posts.
-
   await prisma.vote.deleteMany({});
   await prisma.user.deleteMany({});
   await prisma.post.deleteMany({});
-
-  // Alternatively, for PostgreSQL, you could do a TRUNCATE CASCADE:
-  // await prisma.$executeRawUnsafe(`TRUNCATE TABLE "Vote", "User", "Post" RESTART IDENTITY CASCADE`)
-
   console.log("Cleared previous seed data.");
 
-  // 2) Create your new data
+  // 2) Create a sample post (with an author)
   const post = await prisma.post.create({
     data: {
       user: {
         create: {
           name: "Post Author",
+          username: "post_author",
           email: "post_author@example.com",
         },
       },
@@ -55,35 +48,33 @@ async function main() {
   });
   console.log(`Created post with ID: ${post.id}`);
 
-  // Create 10,000 unique users for random voting
-  const userCount = 50000;
-  const userPromises = [];
-  for (let i = 0; i < userCount; i++) {
-    userPromises.push(
-      prisma.user.create({
-        data: {
-          email: `testuser_${i}@example.com`,
-          name: `Random User ${i}`,
-        },
-      })
-    );
-  }
-  const users = await Promise.all(userPromises);
-  console.log(`Created ${users.length} users.`);
+  // 3) Create 2,000 unique users with one createMany() call
+  const userCount = 2000;
+  const usersData = Array.from({ length: userCount }, (_, i) => ({
+    email: `testuser_${i}@example.com`,
+    name: `Random User ${i}`,
+  }));
 
-  // Create votes for the single post: each user votes exactly once
-  const votePromises = users.map((user) => {
-    return prisma.vote.create({
-      data: {
-        userId: user.id,
-        postId: post.id,
-        value: getRandomVoteValue(),
-        createdAt: getSkewedRandomDate(),
-      },
-    });
+  await prisma.user.createMany({
+    data: usersData,
   });
-  const votes = await Promise.all(votePromises);
-  console.log(`Created ${votes.length} votes for post ID: ${post.id}`);
+  console.log(`Created ${userCount} users.`);
+
+  // 4) Fetch the users so we have their generated IDs
+  const users = await prisma.user.findMany();
+
+  // 5) Create votes in bulk for the single post (each user votes once)
+  const voteData = users.map((user) => ({
+    userId: user.id,
+    postId: post.id,
+    value: getRandomVoteValue(),
+    createdAt: getSkewedRandomDate(),
+  }));
+
+  await prisma.vote.createMany({
+    data: voteData,
+  });
+  console.log(`Created ${voteData.length} votes for post ID: ${post.id}`);
 }
 
 main()

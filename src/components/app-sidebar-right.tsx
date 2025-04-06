@@ -13,8 +13,14 @@ import FollowButton from "@/components/follow-button";
 import UserAvatar from "./user/user-avatar";
 import UserLink from "./user/user-link";
 import { Badge } from "./ui/badge";
+import UserPersona from "./user/user-persona";
 
-export function AppSidebarRight() {
+export async function AppSidebarRight() {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    return null;
+  }
   return (
     <Sidebar collapsible="icon" side="right">
       <SidebarContent>
@@ -45,6 +51,7 @@ export function AppSidebarRight() {
             <Badge variant="secondary" className="mb-2">
               #some topic
             </Badge>
+            <UserPersona user={session?.user} />
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
@@ -85,7 +92,8 @@ async function WhoToFollow() {
               <UserLink username={user.username ?? ""}>
                 <div className="flex items-center  gap-2 px-1 py-1.5 text-left text-sm">
                   <UserAvatar
-                    image={user?.image ?? undefined}
+                    image={user?.image ?? ""}
+                    username=""
                     className="size-8"
                   />
                   <div className="grid flex-1 text-left text-sm leading-tight">

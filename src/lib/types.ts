@@ -22,6 +22,10 @@ export function getUserDataSelect(sessionUserId: string) {
     },
   } satisfies Prisma.UserSelect;
 }
+
+export type UserData = Prisma.UserGetPayload<{
+  select: ReturnType<typeof getUserDataSelect>;
+}>;
 export interface FollowData {
   isFollowedByUser: boolean;
   followersCount: number;

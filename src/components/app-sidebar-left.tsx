@@ -2,7 +2,7 @@
 
 import {
   Bell,
-  ChevronsUpDown,
+  // ChevronsUpDown,
   Home,
   LogOut,
   Pin,
@@ -29,7 +29,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-import UserAvatar from "./user/user-avatar";
+// import UserAvatar from "./user/user-avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -129,7 +129,7 @@ export function AppSidebarLeft() {
                   size="lg"
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
-                  <UserAvatar current className="size-8" />
+                  {/* <UserAvatar current className="size-8" />
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-semibold">{user?.name}</span>
                     {user && (
@@ -138,7 +138,7 @@ export function AppSidebarLeft() {
                       </span>
                     )}
                   </div>
-                  <ChevronsUpDown className="ml-auto size-4" />
+                  <ChevronsUpDown className="ml-auto size-4" /> */}
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -148,8 +148,8 @@ export function AppSidebarLeft() {
                 sideOffset={4}
               >
                 <DropdownMenuLabel className="p-0 font-normal">
-                  <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                    <UserAvatar current className="size-8" />
+                  {/* <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                    <UserAvatar className="size-8" />
                     <div className="grid flex-1 text-left text-sm leading-tight">
                       <span className="truncate font-semibold">
                         {user?.name}
@@ -158,7 +158,7 @@ export function AppSidebarLeft() {
                         @{user?.username}
                       </span>
                     </div>
-                  </div>
+                  </div> */}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
