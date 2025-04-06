@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/hover-card";
 
 import FollowButton from "../follow-button";
+import FollowerCount from "../follower-count";
 
 import UserPersona from "./user-persona";
 
@@ -19,8 +20,18 @@ const UserHoverCard = ({ children, user }: UserHoverCardProps) => {
   return (
     <HoverCard>
       <HoverCardTrigger asChild>{children}</HoverCardTrigger>
-      <HoverCardContent>
-        <UserPersona user={user} />
+      <HoverCardContent className="flex flex-col gap-2">
+        <UserPersona user={user} isHoverable={false} />
+        <div>
+          <FollowerCount
+            userId={user.id!}
+            initialData={{
+              followersCount: 0,
+              isFollowedByUser: false,
+            }}
+          />{" "}
+          followers
+        </div>
         {user.id && (
           <FollowButton
             userId={user.id}

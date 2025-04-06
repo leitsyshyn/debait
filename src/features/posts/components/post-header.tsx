@@ -1,35 +1,25 @@
-import { CardDescription, CardTitle } from "@/components/ui/card";
-import UserLink from "@/components/user/user-link";
-import UserAvatar from "@/components/user/user-avatar";
+import { CardDescription } from "@/components/ui/card";
 import { PostData } from "@/lib/types";
 import { formatRelativeDate } from "@/lib/utils";
+import UserPersona from "@/components/user/user-persona";
 
 import PostMore from "./post-more-alert-dialog";
 
 const PostHeader = ({ post }: { post: PostData }) => {
   return (
     <div className="p-4 pb-0 flex flex-row gap-2 items-center ">
-      <UserAvatar
-        className=""
-        username={post.user.username ?? ""}
-        image={post.user.image ?? ""}
-      />
-      <div className="min-w-0 flex flex-col flex-1 ">
-        <div className="flex flex-row gap-2 items-baseline">
-          <UserLink username={post.user.username ?? ""} className="min-w-0 ">
-            <CardTitle className="truncate leading-6">
-              {post.user.name}
-            </CardTitle>
-          </UserLink>
-          <CardDescription>•</CardDescription>
-
-          <CardDescription className="whitespace-nowrap">
-            {formatRelativeDate(post.createdAt)}
-          </CardDescription>
-        </div>
-        <UserLink username={post.user.username ?? ""}>
-          <CardDescription className=" ">@{post.user.username}</CardDescription>
-        </UserLink>
+      <div className="flex flex-row gap-2 items-start flex-1">
+        <UserPersona
+          user={{
+            ...post.user,
+            username: post.user.username ?? undefined,
+            plan: post.user.plan ?? undefined,
+          }}
+        />
+        <CardDescription className="leading-relaxed">•</CardDescription>
+        <CardDescription className="whitespace-nowrap leading-relaxed">
+          {formatRelativeDate(post.createdAt)}
+        </CardDescription>
       </div>
       <PostMore postId={post.id} userId={post.user.id} />
     </div>

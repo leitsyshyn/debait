@@ -42,6 +42,7 @@ const Post = ({ post }: PostProps) => {
       {/* <div className="[&>*]:[&>*]:z-10 "> */}
       <div className="flex flex-col gap-2">
         <PostHeader post={post} />
+
         <CardContent className="px-4 pb-0">
           <ReadMore>{post.content}</ReadMore>
           {/* <EditorContent editor={editor} /> */}

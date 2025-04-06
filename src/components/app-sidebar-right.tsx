@@ -13,14 +13,8 @@ import FollowButton from "@/components/follow-button";
 import UserAvatar from "./user/user-avatar";
 import UserLink from "./user/user-link";
 import { Badge } from "./ui/badge";
-import UserPersona from "./user/user-persona";
 
 export async function AppSidebarRight() {
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    return null;
-  }
   return (
     <Sidebar collapsible="icon" side="right">
       <SidebarContent>
@@ -51,7 +45,6 @@ export async function AppSidebarRight() {
             <Badge variant="secondary" className="mb-2">
               #some topic
             </Badge>
-            <UserPersona user={session?.user} />
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
@@ -107,12 +100,12 @@ async function WhoToFollow() {
                 </div>
               </UserLink>
               <FollowButton
-                userId={user.id}
+                userId={user?.id ?? ""}
                 initialState={{
                   followersCount: user._count.followers,
-                  isFollowedByUser: user.followers.some(({ followerId }) => {
-                    return followerId === session.user.id;
-                  }),
+                  isFollowedByUser: user.followers.some(
+                    (follower) => follower.followerId === session.user.id
+                  ),
                 }}
               />
             </>

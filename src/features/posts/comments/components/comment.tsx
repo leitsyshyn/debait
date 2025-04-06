@@ -23,7 +23,7 @@ const Comment = ({ comment }: CommentProps) => {
         image={comment.user.image ?? ""}
       />
       <div className="min-w-0 flex flex-col flex-1 ">
-        <div className="flex flex-row gap-2 items-center">
+        <div className="perosna">
           <UserLink username={comment.user.username ?? ""} className="min-w-0 ">
             <CardTitle className="truncate">{comment.user.name}</CardTitle>
           </UserLink>
