@@ -53,6 +53,7 @@ async function main() {
   const usersData = Array.from({ length: userCount }, (_, i) => ({
     email: `testuser_${i}@example.com`,
     name: `Random User ${i}`,
+    username: `random_user_${i}`,
   }));
 
   await prisma.user.createMany({

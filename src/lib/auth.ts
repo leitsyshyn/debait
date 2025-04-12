@@ -9,24 +9,32 @@ import authConfig from "@/lib/auth.config";
 
 declare module "next-auth/jwt" {
   interface JWT {
-    username?: string;
-    role?: UserRole;
-    plan?: Plan;
+    username: string;
+    role: UserRole;
+    plan: Plan;
   }
 }
 
 declare module "next-auth" {
   interface User {
-    username?: string;
-    role?: UserRole;
-    plan?: Plan;
+    username: string;
+    role: UserRole;
+    plan: Plan;
   }
   interface Session {
     user: {
-      role?: UserRole;
-      username?: string;
-      plan?: Plan;
+      username: string;
+      role: UserRole;
+      plan: Plan;
     } & DefaultSession["user"];
+  }
+}
+
+declare module "@auth/core/adapters" {
+  interface AdapterUser {
+    username: string;
+    role: UserRole;
+    plan: Plan;
   }
 }
 
@@ -64,9 +72,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     async jwt({ token, user }) {
       if (user) {
-        token.role = user.role;
         token.id = user.id;
         token.username = user.username;
+        token.role = user.role;
         token.plan = user.plan;
       }
 
@@ -76,11 +84,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (token?.sub && session.user) {
         session.user.id = token.sub;
       }
-      if (token?.role && session.user) {
-        session.user.role = token.role;
-      }
       if (token?.username && session.user) {
         session.user.username = token.username;
+      }
+      if (token?.role && session.user) {
+        session.user.role = token.role;
       }
       if (token?.plan && session.user) {
         session.user.plan = token.plan;

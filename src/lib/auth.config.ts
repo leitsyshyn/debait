@@ -19,6 +19,8 @@ export default {
           name: profile.name,
           image: profile.avatar_url,
           username: profile.login,
+          role: "USER",
+          plan: "FREE",
         };
       },
     }),
@@ -56,8 +58,6 @@ export default {
 
           return {
             ...userWithoutPassword,
-            username: user.username ?? undefined,
-            plan: user.plan ?? undefined,
           };
         } catch (error) {
           console.error("Error authorizing credentials:", error);

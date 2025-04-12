@@ -24,8 +24,8 @@ enum SubscriptionPeriod {
  
 model User {
   id            String          @id @default(cuid())
-  name      String?
-  username      String?         @unique
+  name      String
+  username      String         @unique 
   image         String?
   email         String          @unique
   emailVerified DateTime?
@@ -34,7 +34,7 @@ model User {
   isTwoFactorEnabled Boolean    @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
 
-  plan          Plan? @default(FREE)
+  plan          Plan @default(FREE)
   customerId    String? @unique
   subscription  Subscription?
   

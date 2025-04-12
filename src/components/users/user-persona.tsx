@@ -62,7 +62,7 @@ const UserPersona = (props: UserPersonaProps) => {
   );
 
   if (isHoverable) {
-    return <UserHoverCard user={userData}>{perosna}</UserHoverCard>;
+    return <UserHoverCard user={userData as User}>{perosna}</UserHoverCard>;
   }
 
   return perosna;
