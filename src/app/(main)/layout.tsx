@@ -1,12 +1,8 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebarLeft } from "@/components/app-sidebar-left";
-import { AppSidebarRight } from "@/components/app-sidebar-right";
+import AppSidebarLeft from "@/components/app/app-sidebar-left";
+import AppSidebarRight from "@/components/app/app-sidebar-right";
 
-export default function MainLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <SidebarProvider
       style={{ "--sidebar-width": "16rem" } as React.CSSProperties}
@@ -17,4 +13,6 @@ export default function MainLayout({
       <AppSidebarRight />
     </SidebarProvider>
   );
-}
+};
+
+export default MainLayout;

@@ -2,8 +2,8 @@ import { HeartHandshake, Swords } from "lucide-react";
 
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import { CommentDataWithVotes } from "@/lib/types";
-import UserLink from "@/components/user/user-link";
-import UserAvatar from "@/components/user/user-avatar";
+import UserLink from "@/components/users/user-link";
+import UserAvatar from "@/components/users/user-avatar";
 import ReadMore from "@/components/read-more";
 import { formatRelativeDate } from "@/lib/utils";
 

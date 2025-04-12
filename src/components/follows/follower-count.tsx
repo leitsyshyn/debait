@@ -5,10 +5,13 @@ import { FollowData } from "@/lib/types";
 
 export default function FollowerCount({
   userId,
-  initialData,
+  initialData = {
+    followersCount: 0,
+    isFollowedByUser: false,
+  },
 }: {
   userId: string;
-  initialData: FollowData;
+  initialData?: FollowData;
 }) {
   const { data } = useFollowData(userId, initialData);
 

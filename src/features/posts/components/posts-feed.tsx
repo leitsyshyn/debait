@@ -8,6 +8,7 @@ import { PostsPage } from "@/lib/types";
 import InfiniteScrollContainer from "@/components/infinite-scroll-container";
 
 import Post from "./post";
+import PostSkeleton from "./post-skeleton";
 
 interface PostsFeedProps {
   queryKey: QueryKey;
@@ -35,11 +36,18 @@ export default function PostsFeed({ queryKey, postsUrl }: PostsFeedProps) {
 
   if (status === "pending")
     return (
-      <div className="flex items-center justify-center h-16">
-        <Loader2 className="animate-spin m-auto" />
+      <>
+        {Array.from({ length: 5 }).map((_, index) => (
+          <PostSkeleton key={index} />
+        ))}
+      </>
+    );
+  if (status === "error")
+    return (
+      <div className="border-t flex justify-center items-center p-4 text-sm text-destructive">
+        An error occurred while loading posts
       </div>
     );
-  if (status === "error") return <div>Error</div>;
 
   return (
     <InfiniteScrollContainer
@@ -53,8 +61,13 @@ export default function PostsFeed({ queryKey, postsUrl }: PostsFeedProps) {
       ))}
 
       {isFetchingNextPage && (
-        <div className="flex items-center justify-center h-16">
-          <Loader2 className="animate-spin m-auto" />
+        <div className="flex p-4 justify-center items-center">
+          <Loader2 className="animate-spin" />
+        </div>
+      )}
+      {!hasNextPage && !isFetching && (
+        <div className="border-t flex justify-center items-center p-4 text-sm text-muted-foreground">
+          No more posts to load
         </div>
       )}
     </InfiniteScrollContainer>

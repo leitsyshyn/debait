@@ -45,8 +45,6 @@ const Post = ({ post }: PostProps) => {
 
         <CardContent className="px-4 pb-0">
           <ReadMore>{post.content}</ReadMore>
-          {/* <EditorContent editor={editor} /> */}
-          {/* {post.content} */}
         </CardContent>
         <CardFooter className="px-4 pb-2 flex flex-row gap-2">
           <PostButtonDialog post={post} container={container}>

@@ -3,11 +3,11 @@ import { BadgeCheck } from "lucide-react";
 import { cache } from "react";
 
 import { UserChart } from "@/features/users/components/user-chart";
-import FollowerCount from "@/components/follower-count";
+import FollowerCount from "@/components/follows/follower-count";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
-import UserAvatar from "@/components/user/user-avatar";
-import FollowButton from "@/components/follow-button";
+import UserAvatar from "@/components/users/user-avatar";
+import FollowButton from "@/components/follows/follow-button";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { getUserDataSelect } from "@/lib/types";

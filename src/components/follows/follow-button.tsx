@@ -9,13 +9,16 @@ import { FollowData } from "@/lib/types";
 
 export default function FollowButton({
   userId,
-  initialState,
+  initialData = {
+    followersCount: 0,
+    isFollowedByUser: false,
+  },
 }: {
   userId: string;
-  initialState: FollowData;
+  initialData?: FollowData;
 }) {
   const queryClient = useQueryClient();
-  const { data } = useFollowData(userId, initialState);
+  const { data } = useFollowData(userId, initialData);
   const queryKey: QueryKey = ["follower-data", userId];
 
   const { mutate } = useMutation({

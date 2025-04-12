@@ -2,6 +2,7 @@
 
 import {
   Bell,
+  ChevronsUpDown,
   // ChevronsUpDown,
   Home,
   LogOut,
@@ -29,7 +30,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-// import UserAvatar from "./user/user-avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,10 +38,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { ModeToggle } from "./theme-provider";
-
-export function AppSidebarLeft() {
+} from "../ui/dropdown-menu";
+import { ModeToggle } from "../providers/theme-provider";
+import UserPersona from "../users/user-persona";
+const AppSidebarLeft = () => {
   const { isMobile } = useSidebar();
   const session = useSession();
   const user = session.data?.user;
@@ -59,7 +59,7 @@ export function AppSidebarLeft() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
+              <Link href="/">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-secondary">
                   <Scale className="size-4" />
                 </div>
@@ -67,7 +67,7 @@ export function AppSidebarLeft() {
                   <span className="truncate font-semibold">Debait.</span>
                   <span className="truncate text-xs">Personal</span>
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -110,7 +110,7 @@ export function AppSidebarLeft() {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link href={`/user/${user?.username}`}>
+                  <Link href={`/users/${user?.username}`}>
                     <User />
                     Profile
                   </Link>
@@ -127,18 +127,10 @@ export function AppSidebarLeft() {
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton
                   size="lg"
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground p-2"
                 >
-                  {/* <UserAvatar current className="size-8" />
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">{user?.name}</span>
-                    {user && (
-                      <span className="truncate text-xs text-muted-foreground">
-                        @{user?.username}
-                      </span>
-                    )}
-                  </div>
-                  <ChevronsUpDown className="ml-auto size-4" /> */}
+                  <UserPersona current isHoverable={false} />
+                  <ChevronsUpDown className="ml-auto size-4" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -147,18 +139,8 @@ export function AppSidebarLeft() {
                 align="end"
                 sideOffset={4}
               >
-                <DropdownMenuLabel className="p-0 font-normal">
-                  {/* <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                    <UserAvatar className="size-8" />
-                    <div className="grid flex-1 text-left text-sm leading-tight">
-                      <span className="truncate font-semibold">
-                        {user?.name}
-                      </span>
-                      <span className="truncate text-xs text-muted-foreground">
-                        @{user?.username}
-                      </span>
-                    </div>
-                  </div> */}
+                <DropdownMenuLabel className="p-2 font-normal">
+                  <UserPersona current isHoverable={false} />
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
@@ -206,4 +188,6 @@ export function AppSidebarLeft() {
       </SidebarFooter>
     </Sidebar>
   );
-}
+};
+
+export default AppSidebarLeft;

@@ -1,7 +1,7 @@
 import { CardDescription } from "@/components/ui/card";
 import { PostData } from "@/lib/types";
 import { formatRelativeDate } from "@/lib/utils";
-import UserPersona from "@/components/user/user-persona";
+import UserPersona from "@/components/users/user-persona";
 
 import PostMore from "./post-more-alert-dialog";
 
@@ -16,8 +16,8 @@ const PostHeader = ({ post }: { post: PostData }) => {
             plan: post.user.plan ?? undefined,
           }}
         />
-        <CardDescription className="leading-relaxed">•</CardDescription>
-        <CardDescription className="whitespace-nowrap leading-relaxed">
+        <CardDescription className="leading-tight">•</CardDescription>
+        <CardDescription className="whitespace-nowrap leading-tight">
           {formatRelativeDate(post.createdAt)}
         </CardDescription>
       </div>

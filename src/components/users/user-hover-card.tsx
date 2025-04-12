@@ -6,8 +6,8 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 
-import FollowButton from "../follow-button";
-import FollowerCount from "../follower-count";
+import FollowButton from "../follows/follow-button";
+import FollowerCount from "../follows/follower-count";
 
 import UserPersona from "./user-persona";
 
@@ -22,22 +22,11 @@ const UserHoverCard = ({ children, user }: UserHoverCardProps) => {
       <HoverCardTrigger asChild>{children}</HoverCardTrigger>
       <HoverCardContent className="flex flex-col gap-2">
         <UserPersona user={user} isHoverable={false} />
-        <div>
-          <FollowerCount
-            userId={user.id!}
-            initialData={{
-              followersCount: 0,
-              isFollowedByUser: false,
-            }}
-          />{" "}
-          followers
+        <div className="space-x-1">
+          <FollowerCount userId={user.id!} />
+          <span>followers</span>
         </div>
-        {user.id && (
-          <FollowButton
-            userId={user.id}
-            initialState={{ followersCount: 0, isFollowedByUser: false }}
-          />
-        )}
+        {user.id && <FollowButton userId={user.id} />}
       </HoverCardContent>
     </HoverCard>
   );

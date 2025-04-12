@@ -4,8 +4,8 @@ import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 
 import { Toaster } from "@/components/ui/sonner";
-import { ThemeProvider } from "@/components/theme-provider";
-import ReactQueryProvider from "@/components/react-query-provider";
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import ReactQueryProvider from "@/components/providers/react-query-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
