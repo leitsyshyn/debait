@@ -9,6 +9,7 @@ export function getUserDataSelect(sessionUserId: string) {
     createdAt: true,
     plan: true,
     role: true,
+    bio: true,
     followers: {
       where: { followerId: sessionUserId },
       select: { followerId: true },
@@ -92,3 +93,8 @@ export interface CommentVoteData {
   downvotes: number;
   userVote: number | null;
 }
+
+export type FormStatus = {
+  error?: string;
+  success?: string;
+};

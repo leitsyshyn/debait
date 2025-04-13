@@ -19,7 +19,7 @@ const ReadMore: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
     <Linkify>
       <div>
-        <div className={isExpanded ? "" : `line-clamp-[3]`} ref={textRef}>
+        <div className={isExpanded ? " " : `  line-clamp-[3]`} ref={textRef}>
           {children}
         </div>
         {showButton && (

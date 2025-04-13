@@ -1,8 +1,12 @@
 const UserUsername = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="truncate text-sm text-muted-foreground leading-5">
-      @{children}
-    </div>
+    <>
+      {children && (
+        <div className="truncate text-sm text-muted-foreground leading-5">
+          @{children}
+        </div>
+      )}
+    </>
   );
 };
 

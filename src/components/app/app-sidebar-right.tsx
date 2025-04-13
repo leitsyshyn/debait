@@ -21,7 +21,7 @@ const AppSidebarRight = () => {
         </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>Trending topics</SidebarGroupLabel>
-          <SidebarGroupContent className="flex p-2 flex-row gap-2 flex-wrap">
+          <SidebarGroupContent>
             <TrendingTopics />
           </SidebarGroupContent>
         </SidebarGroup>

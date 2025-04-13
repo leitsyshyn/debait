@@ -1,8 +1,9 @@
 "use server";
 
 import { db } from "@/lib/prisma";
-import { FormStatus } from "@/features/auth/lib/types";
+import { FormStatus } from "@/lib/types";
 import { verifyEmailSchema } from "@/features/auth/lib/schemas";
+import { auth } from "@/lib/auth";
 
 export const verifyEmail = async (
   _previousState: FormStatus | null | undefined,
@@ -39,23 +40,36 @@ export const verifyEmail = async (
     };
   }
 
-  const existingUser = await db.user.findUnique({
-    where: { email: existingToken.email },
-  });
+  if (existingToken.purpose === "REGISTER") {
+    const existingUser = await db.user.findUnique({
+      where: { email: existingToken.email },
+    });
 
-  if (!existingUser) {
-    return {
-      error: "Email not found",
-    };
+    if (!existingUser) {
+      return {
+        error: "Email not found",
+      };
+    }
+
+    await db.user.update({
+      where: { email: existingToken.email },
+      data: {
+        email: existingToken.email,
+        emailVerified: new Date(),
+      },
+    });
   }
 
-  await db.user.update({
-    where: { email: existingToken.email },
-    data: {
-      email: existingToken.email,
-      emailVerified: new Date(),
-    },
-  });
+  if (existingToken.purpose === "UPDATE") {
+    const session = await auth();
+    const userId = session?.user.id;
+    await db.user.update({
+      where: { id: userId },
+      data: {
+        email: existingToken.email,
+      },
+    });
+  }
 
   await db.emailVerificationToken.delete({
     where: { token },

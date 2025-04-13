@@ -1,9 +1,10 @@
 "use server";
 
 import bcrypt from "bcryptjs";
+import { EmailVerificationTokenPurpose } from "@prisma/client";
 
 import { db } from "@/lib/prisma";
-import { FormStatus } from "@/features/auth/lib/types";
+import { FormStatus } from "@/lib/types";
 import { registerSchema } from "@/features/auth/lib/schemas";
 import { sendVerificationEmail } from "@/features/auth/lib/mail";
 import { generateEmailVerificationToken } from "@/features/auth/actions/tokens";
@@ -16,6 +17,7 @@ export const register = async (
     name: formData.get("name"),
     email: formData.get("email"),
     password: formData.get("password"),
+    username: formData.get("username"),
   });
 
   if (!validatedCredentials.success) {
@@ -24,7 +26,7 @@ export const register = async (
     };
   }
 
-  const { name, email, password } = validatedCredentials.data;
+  const { name, username, email, password } = validatedCredentials.data;
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -38,16 +40,28 @@ export const register = async (
     };
   }
 
+  const existingUsername = await db.user.findUnique({
+    where: { username },
+  });
+  if (existingUsername) {
+    return {
+      error: "Username already exists",
+    };
+  }
+
   await db.user.create({
     data: {
       name,
-      username: email.split("@")[0].replace(/\./g, ""),
+      username,
       email,
       hashedPassword,
     },
   });
 
-  const verificationToken = await generateEmailVerificationToken(email);
+  const verificationToken = await generateEmailVerificationToken(
+    email,
+    EmailVerificationTokenPurpose.REGISTER
+  );
 
   await sendVerificationEmail(email, verificationToken);
 

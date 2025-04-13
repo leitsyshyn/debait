@@ -35,6 +35,7 @@ export function RegisterForm() {
       name: "",
       email: "",
       password: "",
+      username: "",
     },
     mode: "onTouched",
   });
@@ -71,6 +72,23 @@ export function RegisterForm() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder="Display Name"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username</FormLabel>
                     <FormControl>
                       <Input type="text" placeholder="User Name" {...field} />
                     </FormControl>

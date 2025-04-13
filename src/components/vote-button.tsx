@@ -39,12 +39,12 @@ export const VoteButton = ({
               <Button
                 variant="ghost"
                 onClick={() => voteMutation.mutate(1)}
-                className="group"
+                className="group/vote"
               >
                 {data.userVote === 1 ? (
                   <HeartHandshake color="hsl(var(--support))" />
                 ) : (
-                  <HeartHandshake className="group-hover:text-[hsl(var(--support))]" />
+                  <HeartHandshake className="group-hover/vote:text-[hsl(var(--support))]" />
                 )}
                 {data.upvotes}
               </Button>
@@ -57,14 +57,14 @@ export const VoteButton = ({
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                className="group"
+                className="group/vote"
                 variant="ghost"
                 onClick={() => voteMutation.mutate(-1)}
               >
                 {data.userVote === -1 ? (
                   <Swords color="hsl(var(--oppose))" />
                 ) : (
-                  <Swords className="group-hover:text-[hsl(var(--oppose))]" />
+                  <Swords className="group-hover/vote:text-[hsl(var(--oppose))]" />
                 )}
                 {data.downvotes}
               </Button>

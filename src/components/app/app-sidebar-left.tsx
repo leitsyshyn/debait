@@ -9,6 +9,7 @@ import {
   Pin,
   Scale,
   Search,
+  Settings,
   Sparkles,
   User,
   UserPlus,
@@ -46,12 +47,6 @@ const AppSidebarLeft = () => {
   const session = useSession();
   const user = session.data?.user;
   const queryClient = useQueryClient();
-  console.log(
-    "STRIPE_CUSTOMER_PORTAL_LINK:",
-    process.env.STRIPE_CUSTOMER_PORTAL_LINK,
-    "PLAN:",
-    user?.plan
-  );
 
   return (
     <Sidebar collapsible="icon">
@@ -116,6 +111,14 @@ const AppSidebarLeft = () => {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href={`/settings`}>
+                    <Settings />
+                    Settings
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -147,7 +150,7 @@ const AppSidebarLeft = () => {
                   <DropdownMenuItem>
                     <Sparkles />
                     {user?.plan === "FREE" ? (
-                      <Link href="/subscription">Upgrade to Pro</Link>
+                      <Link href="/subscriptions">Upgrade to Pro</Link>
                     ) : (
                       <Link
                         href={

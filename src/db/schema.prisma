@@ -26,6 +26,7 @@ model User {
   id            String          @id @default(cuid())
   name      String
   username      String         @unique 
+  bio          String?
   image         String?
   email         String          @unique
   emailVerified DateTime?
@@ -93,11 +94,17 @@ model VerificationToken {
   @@id([identifier, token])
 }
 
+enum EmailVerificationTokenPurpose {
+  REGISTER
+  UPDATE
+  TWO_FACTOR
+}
 model EmailVerificationToken {
   id         String @id @default(cuid())
   token      String @unique
   email      String
   expires    DateTime
+  purpose    EmailVerificationTokenPurpose
  
   @@unique([email, token])
 }

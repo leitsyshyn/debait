@@ -1,11 +1,8 @@
-import { HeartHandshake, Swords } from "lucide-react";
-
-import { CardDescription, CardTitle } from "@/components/ui/card";
+import { CardDescription } from "@/components/ui/card";
 import { CommentDataWithVotes } from "@/lib/types";
-import UserLink from "@/components/users/user-link";
-import UserAvatar from "@/components/users/user-avatar";
 import ReadMore from "@/components/read-more";
 import { formatRelativeDate } from "@/lib/utils";
+import UserPersona from "@/components/users/user-persona";
 
 import CommentMore from "./comment-more-alert-dialog";
 import { CommentVoteButton } from "./comment-vote-button";
@@ -16,28 +13,17 @@ interface CommentProps {
 
 const Comment = ({ comment }: CommentProps) => {
   return (
-    <div className="flex flex-row mt-4 px-4 gap-2 group">
-      <UserAvatar
-        className=""
-        username={comment.user.username ?? ""}
-        image={comment.user.image ?? ""}
-      />
-      <div className="min-w-0 flex flex-col flex-1 ">
-        <div className="perosna">
-          <UserLink username={comment.user.username ?? ""} className="min-w-0 ">
-            <CardTitle className="truncate">{comment.user.name}</CardTitle>
-          </UserLink>
-          {comment.type === "SUPPORT" ? (
-            <HeartHandshake size="1rem" />
-          ) : comment.type === "OPPOSE" ? (
-            <Swords size="1rem" />
-          ) : null}
-          <CardDescription>•</CardDescription>
-
-          <CardDescription className="whitespace-nowrap">
-            {formatRelativeDate(comment.createdAt)}
-          </CardDescription>
-        </div>
+    <div className="flex flex-row mt-4 px-4 gap-2 group justify-between items-start">
+      <div>
+        <UserPersona
+          user={comment.user}
+          dot={
+            <CardDescription className="whitespace-nowrap leading-tight">
+              {" • "}
+              {formatRelativeDate(comment.createdAt)}
+            </CardDescription>
+          }
+        />
         <ReadMore>{comment.content}</ReadMore>
         <div className="flex flex-row gap-2 mt-2">
           <CommentVoteButton

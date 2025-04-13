@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import UserAvatar from "@/components/users/user-avatar";
 import UserDisplayName from "@/components/users/user-display-name";
 import UserUsername from "@/components/users/user-username";
+import { UserData } from "@/lib/types";
 
 import UserLink from "./user-link";
 import UserHoverCard from "./user-hover-card";
@@ -28,10 +29,12 @@ interface WithExplicit {
 
 type UserPersonaProps = (WithCurrent | WithUser | WithExplicit) & {
   isHoverable?: boolean;
+  hasAvatar?: boolean;
+  dot?: React.ReactNode;
 };
 
 const UserPersona = (props: UserPersonaProps) => {
-  const { isHoverable = true } = props;
+  const { isHoverable = true, hasAvatar = true, dot } = props;
   const { data: session } = useSession();
   const userData: Partial<User> = props.current
     ? session?.user ?? {}
@@ -46,14 +49,19 @@ const UserPersona = (props: UserPersonaProps) => {
   const { name, username, image } = userData;
 
   const perosna = (
-    <div className="flex flex-row gap-2 items-center w-48 relative">
-      <UserLink username={username}>
-        <UserAvatar username={username} image={image ?? undefined} />
-      </UserLink>
-      <div className="flex flex-col min-w-0 gap-1">
+    <div className="flex flex-row gap-2 items-center relative min-w-0">
+      {hasAvatar && (
         <UserLink username={username}>
-          <UserDisplayName>{name}</UserDisplayName>
+          <UserAvatar username={username} image={image ?? undefined} />
         </UserLink>
+      )}
+      <div className="flex flex-col min-w-0 gap-1">
+        <div className="flex items-center gap-1 min-w-0 ">
+          <UserLink username={username} className="min-w-0 ">
+            <UserDisplayName>{name}</UserDisplayName>
+          </UserLink>
+          {dot}
+        </div>
         <UserLink username={username}>
           <UserUsername>{username}</UserUsername>
         </UserLink>
@@ -62,7 +70,7 @@ const UserPersona = (props: UserPersonaProps) => {
   );
 
   if (isHoverable) {
-    return <UserHoverCard user={userData as User}>{perosna}</UserHoverCard>;
+    return <UserHoverCard user={userData as UserData}>{perosna}</UserHoverCard>;
   }
 
   return perosna;

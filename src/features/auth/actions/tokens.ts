@@ -3,10 +3,14 @@
 import crypto from "crypto";
 
 import { v4 as uuid } from "uuid";
+import { EmailVerificationTokenPurpose } from "@prisma/client";
 
 import { db } from "@/lib/prisma";
 
-export async function generateEmailVerificationToken(email: string) {
+export async function generateEmailVerificationToken(
+  email: string,
+  purpose: EmailVerificationTokenPurpose
+) {
   const token = uuid();
   const expires = new Date(Date.now() + 1000 * 60 * 60);
 
@@ -21,6 +25,7 @@ export async function generateEmailVerificationToken(email: string) {
       email,
       token,
       expires,
+      purpose,
     },
   });
 

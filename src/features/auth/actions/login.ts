@@ -2,9 +2,10 @@
 
 import bcrypt from "bcryptjs";
 import { AuthError } from "next-auth";
+import { EmailVerificationTokenPurpose } from "@prisma/client";
 
 import { db } from "@/lib/prisma";
-import { FormStatus } from "@/features/auth/lib/types";
+import { FormStatus } from "@/lib/types";
 import { loginSchema } from "@/features/auth/lib/schemas";
 import { signIn } from "@/lib/auth";
 import {
@@ -40,7 +41,13 @@ export const login = async (
   });
 
   if (existingUser && !existingUser.emailVerified) {
-    sendVerificationEmail(email, await generateEmailVerificationToken(email));
+    sendVerificationEmail(
+      email,
+      await generateEmailVerificationToken(
+        email,
+        EmailVerificationTokenPurpose.REGISTER
+      )
+    );
     return {
       error: "Please verify your email",
     };

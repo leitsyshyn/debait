@@ -1,11 +1,10 @@
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { getUserDataSelect } from "@/lib/types";
+import UserPersona from "@/components/users/user-persona";
+import FollowButton from "@/components/follows/follow-button";
 
-import FollowButton from "../follows/follow-button";
-import UserPersona from "../users/user-persona";
-
-async function WhoToFollow() {
+async function Following({ userId }: { userId: string }) {
   const session = await auth();
   if (!session?.user?.id) {
     return null;
@@ -14,20 +13,19 @@ async function WhoToFollow() {
   const usersToFollow = await db.user.findMany({
     where: {
       NOT: {
-        id: session.user.id,
+        id: userId,
       },
       followers: {
-        none: {
-          followerId: session.user.id,
+        some: {
+          followerId: userId,
         },
       },
     },
     select: getUserDataSelect(session.user.id),
-    take: 5,
   });
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 p-4">
       {usersToFollow.map((user) => (
         <div
           key={user.id}
@@ -53,4 +51,4 @@ async function WhoToFollow() {
   );
 }
 
-export default WhoToFollow;
+export default Following;

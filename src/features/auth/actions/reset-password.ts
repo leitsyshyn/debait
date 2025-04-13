@@ -3,7 +3,7 @@
 import bcrypt from "bcryptjs";
 
 import { db } from "@/lib/prisma";
-import { FormStatus } from "@/features/auth/lib/types";
+import { FormStatus } from "@/lib/types";
 import { resetPasswordSchema } from "@/features/auth/lib/schemas";
 
 export const resetPassword = async (

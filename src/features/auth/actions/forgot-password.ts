@@ -1,6 +1,6 @@
 "use server";
 import { db } from "@/lib/prisma";
-import { FormStatus } from "@/features/auth/lib/types";
+import { FormStatus } from "@/lib/types";
 import { sendResetPasswordEmail } from "@/features/auth/lib/mail";
 import { generatePasswordResetToken } from "@/features/auth/actions/tokens";
 

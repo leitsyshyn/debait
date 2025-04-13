@@ -1,18 +1,20 @@
-import { User } from "next-auth";
+import { formatDate } from "date-fns";
 
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { UserData } from "@/lib/types";
 
 import FollowButton from "../follows/follow-button";
 import FollowerCount from "../follows/follower-count";
+import { CardDescription } from "../ui/card";
 
 import UserPersona from "./user-persona";
 
 type UserHoverCardProps = {
-  user: User;
+  user: UserData;
   children: React.ReactNode;
 };
 
@@ -22,10 +24,15 @@ const UserHoverCard = ({ children, user }: UserHoverCardProps) => {
       <HoverCardTrigger asChild>{children}</HoverCardTrigger>
       <HoverCardContent className="flex flex-col gap-2">
         <UserPersona user={user} isHoverable={false} />
-        <div className="space-x-1">
-          <FollowerCount userId={user.id!} />
-          <span>followers</span>
-        </div>
+        <CardDescription className="text-sm text-muted-foreground">
+          {user.bio}
+        </CardDescription>
+        <CardDescription className="space-x-1">
+          <FollowerCount userId={user.id!} /> followers
+        </CardDescription>
+        <CardDescription className="text-sm text-muted-foreground">
+          joined {formatDate(new Date(user.createdAt), "dd MMMM yyyy")}
+        </CardDescription>
         {user.id && <FollowButton userId={user.id} />}
       </HoverCardContent>
     </HoverCard>

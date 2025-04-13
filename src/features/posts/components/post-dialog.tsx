@@ -5,8 +5,8 @@ import {
   MessagesSquare,
   Swords,
 } from "lucide-react";
-import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+// import { useState } from "react";
+// import { useQueryClient } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -18,13 +18,13 @@ import {
 import { PostDataWithVotes } from "@/lib/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ReadMore from "@/components/read-more";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
 
 import CreateCommentForm from "../comments/components/create-comment-form";
 
@@ -39,8 +39,8 @@ interface PostDialogProps {
 }
 
 const PostDialog = ({ post, children }: PostDialogProps) => {
-  const [sortBy, setSortBy] = useState<"top" | "new">("new");
-  const queryClient = useQueryClient();
+  // const [sortBy, setSortBy] = useState<"top" | "new">("new");
+  // const queryClient = useQueryClient();
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -56,7 +56,7 @@ const PostDialog = ({ post, children }: PostDialogProps) => {
           <div>
             <Tabs defaultValue="all">
               <TabsList className="flex sticky top-0 z-10 gap-2 p-6 rounded-none border-y">
-                <Select
+                {/* <Select
                   value={sortBy}
                   onValueChange={(value) => {
                     setSortBy(value as "top" | "new");
@@ -72,7 +72,7 @@ const PostDialog = ({ post, children }: PostDialogProps) => {
                     <SelectItem value="new">New</SelectItem>
                     <SelectItem value="top">Top</SelectItem>
                   </SelectContent>
-                </Select>
+                </Select> */}
                 <TabsTrigger value="all" asChild>
                   <Button variant="ghost">
                     <MessagesSquare /> All
@@ -100,16 +100,16 @@ const PostDialog = ({ post, children }: PostDialogProps) => {
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="all">
-                <PostComments post={post} sortBy={sortBy} />
+                <PostComments post={post} sortBy={"new"} />
               </TabsContent>
               <TabsContent value="support">
-                <PostComments type="SUPPORT" post={post} sortBy={sortBy} />
+                <PostComments type="SUPPORT" post={post} sortBy={"new"} />
               </TabsContent>
               <TabsContent value="oppose">
-                <PostComments type="OPPOSE" post={post} sortBy={sortBy} />
+                <PostComments type="OPPOSE" post={post} sortBy={"new"} />
               </TabsContent>
               <TabsContent value="clarify">
-                <PostComments type="CLARIFY" post={post} sortBy={sortBy} />
+                <PostComments type="CLARIFY" post={post} sortBy={"new"} />
               </TabsContent>
               <TabsContent value="stats">
                 <PostChart votes={post.votes} />

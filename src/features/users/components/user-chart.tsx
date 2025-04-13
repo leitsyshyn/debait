@@ -41,8 +41,8 @@ export function UserChart({
 
   return (
     <div>
-      <ChartContainer config={chartConfig} className="min-h-44">
-        <RadarChart data={chartData}>
+      <ChartContainer config={chartConfig} className="min-h-44 max-w-56">
+        <RadarChart data={chartData} className="max-w-56">
           <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
           <PolarAngleAxis dataKey="type" />
           <PolarGrid />
