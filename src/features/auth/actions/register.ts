@@ -1,7 +1,6 @@
 "use server";
 
 import bcrypt from "bcryptjs";
-import { EmailVerificationTokenPurpose } from "@prisma/client";
 
 import { db } from "@/lib/prisma";
 import { FormStatus } from "@/lib/types";
@@ -60,7 +59,7 @@ export const register = async (
 
   const verificationToken = await generateEmailVerificationToken(
     email,
-    EmailVerificationTokenPurpose.REGISTER
+    "REGISTER_EMAIL_VERIFICATION"
   );
 
   await sendVerificationEmail(email, verificationToken);

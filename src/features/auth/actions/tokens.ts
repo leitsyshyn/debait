@@ -3,30 +3,23 @@
 import crypto from "crypto";
 
 import { v4 as uuid } from "uuid";
-import { EmailVerificationTokenPurpose } from "@prisma/client";
+import { TokenType } from "@prisma/client";
 
 import { db } from "@/lib/prisma";
 
 export async function generateEmailVerificationToken(
   email: string,
-  purpose: EmailVerificationTokenPurpose
+  type: TokenType
 ) {
   const token = uuid();
   const expires = new Date(Date.now() + 1000 * 60 * 60);
 
-  await db.emailVerificationToken.deleteMany({
-    where: {
-      email,
-    },
+  await db.token.deleteMany({
+    where: { email, type },
   });
 
-  await db.emailVerificationToken.create({
-    data: {
-      email,
-      token,
-      expires,
-      purpose,
-    },
+  await db.token.create({
+    data: { email, token, expires, type },
   });
 
   return token;
@@ -36,18 +29,12 @@ export async function generatePasswordResetToken(email: string) {
   const token = uuid();
   const expires = new Date(Date.now() + 1000 * 60 * 60);
 
-  await db.passwordResetToken.deleteMany({
-    where: {
-      email,
-    },
+  await db.token.deleteMany({
+    where: { email, type: TokenType.PASSWORD_RESET },
   });
 
-  await db.passwordResetToken.create({
-    data: {
-      email,
-      token,
-      expires,
-    },
+  await db.token.create({
+    data: { email, token, expires, type: TokenType.PASSWORD_RESET },
   });
 
   return token;
@@ -55,20 +42,14 @@ export async function generatePasswordResetToken(email: string) {
 
 export async function generateTwoFactorToken(email: string) {
   const token = crypto.randomInt(100000, 999999).toString();
-  const expires = new Date(Date.now() + 1000 * 60 * 5);
+  const expires = new Date(Date.now() + 1000 * 60 * 5); // 5 minutes
 
-  await db.twoFactorToken.deleteMany({
-    where: {
-      email,
-    },
+  await db.token.deleteMany({
+    where: { email, type: TokenType.TWO_FACTOR },
   });
 
-  await db.twoFactorToken.create({
-    data: {
-      email,
-      token,
-      expires,
-    },
+  await db.token.create({
+    data: { email, token, expires, type: TokenType.TWO_FACTOR },
   });
 
   return token;

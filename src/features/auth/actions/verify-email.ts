@@ -20,7 +20,7 @@ export const verifyEmail = async (
   }
   const token = validatedToken.data.token;
 
-  const existingToken = await db.emailVerificationToken.findUnique({
+  const existingToken = await db.token.findUnique({
     where: { token },
   });
 
@@ -40,7 +40,7 @@ export const verifyEmail = async (
     };
   }
 
-  if (existingToken.purpose === "REGISTER") {
+  if (existingToken.type === "REGISTER_EMAIL_VERIFICATION") {
     const existingUser = await db.user.findUnique({
       where: { email: existingToken.email },
     });
@@ -60,7 +60,7 @@ export const verifyEmail = async (
     });
   }
 
-  if (existingToken.purpose === "UPDATE") {
+  if (existingToken.type === "UPDATE_EMAIL_VERIFICATION") {
     const session = await auth();
     const userId = session?.user.id;
     await db.user.update({
@@ -71,7 +71,7 @@ export const verifyEmail = async (
     });
   }
 
-  await db.emailVerificationToken.delete({
+  await db.token.delete({
     where: { token },
   });
 

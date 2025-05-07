@@ -25,14 +25,13 @@ const UserHoverCard = ({ children, user }: UserHoverCardProps) => {
       <HoverCardContent className="flex flex-col gap-2">
         <UserPersona user={user} isHoverable={false} />
         <CardDescription className="text-sm text-muted-foreground">
-          {user.bio}
-        </CardDescription>
-        <CardDescription className="space-x-1">
-          <FollowerCount userId={user.id!} /> followers
-        </CardDescription>
-        <CardDescription className="text-sm text-muted-foreground">
           joined {formatDate(new Date(user.createdAt), "dd MMMM yyyy")}
         </CardDescription>
+        <div className="line-clamp-3">{user.bio}</div>
+        <div className="space-x-1">
+          <FollowerCount userId={user.id!} /> followers
+        </div>
+
         {user.id && <FollowButton userId={user.id} />}
       </HoverCardContent>
     </HoverCard>

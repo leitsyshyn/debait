@@ -40,9 +40,7 @@ model User {
   subscription  Subscription?
   
   accounts      Account[]
-  sessions      Session[]
-  Authenticator Authenticator[]
- 
+   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -75,58 +73,23 @@ model Account {
  
   @@id([provider, providerAccountId])
 }
- 
-model Session {
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
- 
-model VerificationToken {
-  identifier String
-  token      String
-  expires    DateTime
- 
-  @@id([identifier, token])
-}
 
-enum EmailVerificationTokenPurpose {
-  REGISTER
-  UPDATE
+enum TokenType {
+  REGISTER_EMAIL_VERIFICATION
+  UPDATE_EMAIL_VERIFICATION
+  PASSWORD_RESET
   TWO_FACTOR
 }
-model EmailVerificationToken {
+
+model Token {
   id         String @id @default(cuid())
   token      String @unique
   email      String
   expires    DateTime
-  purpose    EmailVerificationTokenPurpose
- 
+  type       TokenType
+
   @@unique([email, token])
 }
-
-model PasswordResetToken {
-  id         String @id @default(cuid())
-  token      String @unique
-  email      String
-  expires    DateTime
- 
-  @@unique([email, token])
-}
-
-model TwoFactorToken {
-  id         String @id @default(cuid())
-  token      String @unique
-  email      String
-  expires    DateTime
- 
-  @@unique([email, token])
-}
-
 model TwoFactorConfirmation {
   if        String @id @default(cuid())
   userId    String
@@ -134,22 +97,6 @@ model TwoFactorConfirmation {
 
   @@unique([userId])
 }
-
-model Authenticator {
-  credentialID         String  @unique
-  userId               String
-  providerAccountId    String
-  credentialPublicKey  String
-  counter              Int
-  credentialDeviceType String
-  credentialBackedUp   Boolean
-  transports           String?
- 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
-  @@id([userId, credentialID])
-}
-
 model Subscription {
   id         String @id @default(cuid())
   userId     String @unique
@@ -210,7 +157,6 @@ model CommentVote {
 
   @@unique([commentId, userId]) 
 }
-
 
 
 model Tag {

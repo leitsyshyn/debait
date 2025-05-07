@@ -1,7 +1,5 @@
 "use server";
 
-import { EmailVerificationTokenPurpose } from "@prisma/client";
-
 import { db } from "@/lib/prisma";
 import { FormStatus } from "@/lib/types";
 import { updateEmailSchema } from "@/features/auth/lib/schemas";
@@ -56,7 +54,7 @@ export const updateEmail = async (
 
   const verificationToken = await generateEmailVerificationToken(
     email,
-    EmailVerificationTokenPurpose.UPDATE
+    "UPDATE_EMAIL_VERIFICATION"
   );
 
   await sendVerificationEmail(email, verificationToken);

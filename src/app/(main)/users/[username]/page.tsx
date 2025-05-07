@@ -106,9 +106,7 @@ const Page = async ({ params }: { params: Promise<{ username: string }> }) => {
             />{" "}
             followers
           </div>
-          <div className="text-sm text-muted-foreground break-all">
-            {user?.bio}
-          </div>
+          <div className=" break-all">{user?.bio}</div>
         </div>
       </Card>
 
