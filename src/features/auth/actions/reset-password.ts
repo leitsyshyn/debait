@@ -26,8 +26,11 @@ export const resetPassword = async (
 
   console.log(token);
 
-  const existingToken = await db.passwordResetToken.findUnique({
-    where: { token },
+  const existingToken = await db.token.findUnique({
+    where: {
+      type: "PASSWORD_RESET",
+      token,
+    },
   });
 
   if (!existingToken) {
@@ -65,8 +68,11 @@ export const resetPassword = async (
     },
   });
 
-  await db.passwordResetToken.delete({
-    where: { token },
+  await db.token.delete({
+    where: {
+      type: "PASSWORD_RESET",
+      token,
+    },
   });
 
   return {
