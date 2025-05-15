@@ -2,7 +2,7 @@ import { Badge } from "../ui/badge";
 
 const TrendingTopics = () => {
   return (
-    <div>
+    <div className="flex flex-wrap gap-2">
       <Badge variant="secondary" className="mb-2">
         #some topic
       </Badge>
