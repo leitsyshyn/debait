@@ -2,7 +2,6 @@
 
 import bcrypt from "bcryptjs";
 import { AuthError } from "next-auth";
-import { EmailVerificationTokenPurpose } from "@prisma/client";
 
 import { db } from "@/lib/prisma";
 import { FormStatus } from "@/lib/types";
@@ -43,10 +42,7 @@ export const login = async (
   if (existingUser && !existingUser.emailVerified) {
     sendVerificationEmail(
       email,
-      await generateEmailVerificationToken(
-        email,
-        EmailVerificationTokenPurpose.REGISTER
-      )
+      await generateEmailVerificationToken(email, "REGISTER_EMAIL_VERIFICATION")
     );
     return {
       error: "Please verify your email",
@@ -55,8 +51,9 @@ export const login = async (
 
   if (existingUser?.isTwoFactorEnabled) {
     if (secret) {
-      const twoFactorToken = await db.twoFactorToken.findFirst({
+      const twoFactorToken = await db.token.findFirst({
         where: {
+          type: "TWO_FACTOR",
           email: existingUser.email,
           token: secret,
           expires: {
@@ -71,8 +68,9 @@ export const login = async (
         };
       }
 
-      await db.twoFactorToken.deleteMany({
+      await db.token.deleteMany({
         where: {
+          type: "TWO_FACTOR",
           email: existingUser.email,
         },
       });

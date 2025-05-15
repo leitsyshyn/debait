@@ -4,13 +4,13 @@ import { faker } from "@faker-js/faker";
 const prisma = new PrismaClient();
 
 // Configurable constants (override via environment variables if desired)
-const NUM_USERS = Number(process.env.NUM_USERS) || 100;
-const POSTS_PER_USER = Number(process.env.POSTS_PER_USER) || 10;
+const NUM_USERS = Number(process.env.NUM_USERS) || 25;
+const POSTS_PER_USER = Number(process.env.POSTS_PER_USER) || 6;
 const COMMENTS_PER_POST = Number(process.env.COMMENTS_PER_POST) || 2;
-const VOTES_PER_POST = Number(process.env.VOTES_PER_POST) || 90;
+const VOTES_PER_POST = Number(process.env.VOTES_PER_POST) || 50;
 const COMMENT_VOTES_PER_COMMENT =
-  Number(process.env.COMMENT_VOTES_PER_COMMENT) || 10;
-const FOLLOWS_PER_USER = Number(process.env.FOLLOWS_PER_USER) || 25;
+  Number(process.env.COMMENT_VOTES_PER_COMMENT) || 8;
+const FOLLOWS_PER_USER = Number(process.env.FOLLOWS_PER_USER) || 10;
 
 // Define the time range for our one-year span.
 const now = new Date();
